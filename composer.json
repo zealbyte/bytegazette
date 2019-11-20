@@ -1,0 +1,36 @@
+{
+	"name": "zealbyte/bytegazette",
+	"type": "wordpress-theme",
+	"license": "GPL-2.0-or-later",
+	"description": "Add some elegant pizzazz to your site with a good clean fun design and a material style layout with this simple and easy to use theme based on UIKit 3.",
+	"homepage": "https://zealbyte.org/projects/bytegazette",
+	"keywords": [
+		"wordpress", "wp", "bbpress", "comments", "blog", "news"
+	],
+	"support": {
+		"forum": "https://zealbyte.org/support/bytegazette",
+		"issues": "https://github.com/zealbyte/bytegazette/issues",
+		"source": "https://github.com/zealbyte/bytegazette"
+	},
+	"authors": [
+		{
+			"name": "Dustin Martella",
+			"email": "dustin.martella@zealbyte.com",
+			"homepage": "https://zealbyte.org/authors/dustinmartella"
+		}
+	],
+	"require": {
+		"php": "^5.3|^7.0",
+		"composer/installers": "~1.0"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
+		"phpcompatibility/php-compatibility": "~8.2",
+		"phpunit/phpunit": "^5",
+		"squizlabs/php_codesniffer": "^3.2",
+		"wp-coding-standards/wpcs": "^0.14.0"
+	},
+	"scripts": {
+		"lint": "phpcs"
+	}
+}

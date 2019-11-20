@@ -1,0 +1,49 @@
+{
+	"name": "the_byte_gazette",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "GPL-2.0",
+	"scripts": {
+		"build": "./node_modules/.bin/webpack --env.production --mode=production",
+		"dev": "./node_modules/.bin/webpack --env.development --mode=development",
+		"watch": "./node_modules/.bin/webpack --env.development --mode=development --watch",
+		"lint": "esw webpack.config.* src tools --color"
+	},
+	"devDependencies": {
+		"@wordpress/i18n": "^3.0.0",
+		"ajv": "^6.5.4",
+		"autoprefixer": "^9.1.5",
+		"eslint": "^4.19.1",
+		"eslint-config-wordpress": "^2.0.0",
+		"eslint-plugin-jest": "^21.6.1",
+		"eslint-plugin-jsx-a11y": "^6.0.3",
+		"eslint-plugin-react": "^7.5.1",
+		"eslint-plugin-wordpress": "^0.1.0",
+		"eslint-watch": "^3.1.5",
+		"install": "^0.10.4",
+		"npm": "^6.4.1",
+		"style-loader": "^0.23.0"
+	},
+	"dependencies": {
+		"chart.js": "^2.7.2",
+		"classnames": "^2.2.6",
+		"clean-webpack-plugin": "^0.1.19",
+		"copy-webpack-plugin": "^4.5.3",
+		"cross-env": "^5.0.1",
+		"css-loader": "^0.28.11",
+		"file-loader": "^1.1.11",
+		"import-glob": "^1.5.0",
+		"mini-css-extract-plugin": "^0.4.4",
+		"node-sass": "^4.9.3",
+		"node-sass-glob-importer": "^5.1.2",
+		"normalize.css": "^8.0.1",
+		"optimize-css-assets-webpack-plugin": "^4.0.3",
+		"postcss-loader": "^2.1.6",
+		"raw-loader": "^0.5.1",
+		"sass-loader": "^7.1.0",
+		"webpack": "^4.20.2",
+		"webpack-cli": "^3.1.2",
+		"webpack-manifest-plugin": "^2.0.4",
+		"wpapi": "^1.1.2"
+	}
+}

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [ "npm" == "$1" ]; then
+	eval docker run --rm -ti -v ${PWD}:/app zealbyte/packer /bin/bash -c \"$@\"
+elif [ "bower" == "$1" ]; then
+	eval docker run --rm -ti -v ${PWD}:/app zealbyte/packer /bin/bash -c \"$@ --allow-root\"
+elif [ "composer" == "$1" ]; then
+	eval docker run --rm -ti -v ${PWD}:/app composer /bin/bash -c \"$@\"
+elif [ "" == "$1" ]; then
+	echo "No command was supplied"
+else
+	echo "$1 is not a valid docker container command."
+fi

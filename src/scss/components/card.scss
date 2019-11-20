@@ -1,0 +1,205 @@
+// Name:            Card
+// Description:     Component to create boxed content containers
+//
+// Component:       `uk-card`
+//
+// Sub-objects:     `uk-card-body`
+//                  `uk-card-header`
+//                  `uk-card-footer`
+//                  `uk-card-media-*`
+//                  `uk-card-title`
+//                  `uk-card-badge`
+//
+// Modifiers:       `uk-card-hover`
+//                  `uk-card-default`
+//                  `uk-card-primary`
+//                  `uk-card-secondary`
+//                  `uk-card-small`
+//                  `uk-card-large`
+//
+// Uses:            `uk-grid-stack`
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+$card-body-padding-horizontal:                  $global-gutter !default;
+$card-body-padding-vertical:                    $global-gutter !default;
+
+$card-body-padding-horizontal-l:                $global-medium-gutter !default;
+$card-body-padding-vertical-l:                  $global-medium-gutter !default;
+
+$card-header-padding-horizontal:                $global-gutter !default;
+$card-header-padding-vertical:                  round($global-gutter / 2) !default;
+
+$card-header-padding-horizontal-l:              $global-medium-gutter !default;
+$card-header-padding-vertical-l:                round($global-medium-gutter / 2) !default;
+
+$card-footer-padding-horizontal:                $global-gutter !default;
+$card-footer-padding-vertical:                  ($global-gutter / 2) !default;
+
+$card-footer-padding-horizontal-l:              $global-medium-gutter !default;
+$card-footer-padding-vertical-l:                round($global-medium-gutter / 2) !default;
+
+$card-title-font-size:                          $global-large-font-size !default;
+$card-title-line-height:                        1.4 !default;
+
+$card-badge-top:                                $global-gutter !default;
+$card-badge-right:                              $card-badge-top !default;
+
+$card-default-background:                       $global-background !default;
+$card-default-color:                            $global-color !default;
+$card-default-title-color:                      $global-emphasis-color !default;
+
+$card-small-body-padding-horizontal:            $global-margin !default;
+$card-small-body-padding-vertical:              $global-margin !default;
+$card-small-header-padding-horizontal:          $global-margin !default;
+$card-small-header-padding-vertical:            round($global-margin / 1.5) !default;
+$card-small-footer-padding-horizontal:          $global-margin !default;
+$card-small-footer-padding-vertical:            round($global-margin / 1.5) !default;
+
+$card-large-body-padding-horizontal-l:          $global-large-gutter !default;
+$card-large-body-padding-vertical-l:            $global-large-gutter !default;
+$card-large-header-padding-horizontal-l:        $global-large-gutter !default;
+$card-large-header-padding-vertical-l:          round($global-large-gutter / 2) !default;
+$card-large-footer-padding-horizontal-l:        $global-large-gutter !default;
+$card-large-footer-padding-vertical-l:          round($global-large-gutter / 2) !default;
+
+
+/* ========================================================================
+Component: Card
+========================================================================== */
+
+.uk-card {
+	position: relative;
+	box-sizing: border-box;
+	border: $global-border-width solid $global-border;
+}
+
+
+/* Sections
+========================================================================== */
+
+.uk-card-body {
+	padding: $card-body-padding-vertical $card-body-padding-horizontal;
+}
+
+.uk-card-header {
+	padding: $card-header-padding-vertical $card-header-padding-horizontal;
+}
+
+.uk-card-footer {
+	padding: $card-footer-padding-vertical $card-footer-padding-horizontal;
+	border-top: $global-border-width solid $global-border;
+}
+
+/* Desktop and bigger */
+@media (min-width: $breakpoint-large) {
+
+	.uk-card-body { padding: $card-body-padding-vertical-l $card-body-padding-horizontal-l; }
+
+	.uk-card-header { padding: $card-header-padding-vertical-l $card-header-padding-horizontal-l; }
+
+	.uk-card-footer { padding: $card-footer-padding-vertical-l $card-footer-padding-horizontal-l; }
+
+}
+
+/*
+ * Micro clearfix
+ */
+
+.uk-card-body::before,
+.uk-card-body::after,
+.uk-card-header::before,
+.uk-card-header::after,
+.uk-card-footer::before,
+.uk-card-footer::after {
+	content: "";
+	display: table;
+}
+
+.uk-card-body::after,
+.uk-card-header::after,
+.uk-card-footer::after { clear: both; }
+
+/*
+ * Remove margin from the last-child
+ */
+
+.uk-card-body > :last-child,
+.uk-card-header > :last-child,
+.uk-card-footer > :last-child { margin-bottom: 0; }
+
+/* Title
+========================================================================== */
+
+.uk-card-title {
+	font-size: $card-title-font-size;
+	line-height: $card-title-line-height;
+}
+
+
+/* Badge
+========================================================================== */
+
+.uk-card-badge {
+	position: absolute;
+	top: $card-badge-top;
+	right: $card-badge-right;
+	z-index: 1;
+}
+
+/*
+ * Remove margin from adjacent element
+ */
+
+.uk-card-badge:first-child + * { margin-top: 0; }
+
+
+/* Style modifiers
+========================================================================== */
+
+/*
+ * Default
+ * Note: Header and Footer are only implemented for the default style
+ */
+
+.uk-card-default {
+	background: $card-default-background;
+	color: $card-default-color;
+}
+
+.uk-card-default .uk-card-title {
+	color: $card-default-title-color;
+}
+
+
+/* Size modifier
+========================================================================== */
+
+/*
+ * Small
+ */
+
+.uk-card-small.uk-card-body,
+.uk-card-small .uk-card-body { padding: $card-small-body-padding-vertical $card-small-body-padding-horizontal; }
+
+.uk-card-small .uk-card-header { padding: $card-small-header-padding-vertical $card-small-header-padding-horizontal; }
+.uk-card-small .uk-card-footer { padding: $card-small-footer-padding-vertical $card-small-footer-padding-horizontal; }
+
+/*
+ * Large
+ */
+
+/* Desktop and bigger */
+@media (min-width: $breakpoint-large) {
+
+	.uk-card-large.uk-card-body,
+	.uk-card-large .uk-card-body { padding: $card-large-body-padding-vertical-l $card-large-body-padding-horizontal-l; }
+
+	.uk-card-large .uk-card-header { padding: $card-large-header-padding-vertical-l $card-large-header-padding-horizontal-l; }
+	.uk-card-large .uk-card-footer { padding: $card-large-footer-padding-vertical-l $card-large-footer-padding-horizontal-l; }
+
+}

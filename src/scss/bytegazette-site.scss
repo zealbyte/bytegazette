@@ -1,0 +1,141 @@
+/*--------------------------------------------------------------
+# Global Variables
+--------------------------------------------------------------*/
+
+// Base
+$breakpoint-small:               640px !default;  // Phone landscape
+$breakpoint-medium:              960px !default;  // Tablet Landscape
+$breakpoint-large:               1200px !default; // Desktop
+$breakpoint-xlarge:              1600px !default; // Large Screens
+
+$breakpoint-xsmall-max:          ($breakpoint-small - 1) !default;
+$breakpoint-small-max:           ($breakpoint-medium - 1) !default;
+$breakpoint-medium-max:          ($breakpoint-large - 1) !default;
+$breakpoint-large-max:           ($breakpoint-xlarge - 1) !default;
+
+// Typography
+$global-font-size:                16px !default;
+$global-line-height:              1.5 !default;
+
+$global-xxlarge-font-size:        32px !default;
+$global-xlarge-font-size:         28px !default;
+$global-large-font-size:          24px !default;
+$global-medium-font-size:         20px !default;
+$global-small-font-size:          14px !default;
+
+// Colors
+$global-color:                    #666 !default;
+$global-emphasis-color:           #333 !default;
+$global-muted-color:              #999 !default;
+
+$global-link-color:               #1e87f0 !default;
+$global-link-hover-color:         #0f6ecd !default;
+
+$global-inverse-color:            #fff !default;
+
+// Backgrounds
+$global-background:               #fff !default;
+
+$global-muted-background:         #f8f8f8 !default;
+$global-primary-background:       #1e87f0 !default;
+$global-secondary-background:     #222 !default;
+
+$global-success-background:       #32d296 !default;
+$global-warning-background:       #faa05a !default;
+$global-danger-background:        #f0506e !default;
+
+// Borders
+$global-border-width:             1px !default;
+$global-border:                   #e5e5e5 !default;
+
+// Box-Shadows
+$global-small-box-shadow:         0 2px 8px rgba(0,0,0,0.08) !default;
+$global-medium-box-shadow:        0 5px 15px rgba(0,0,0,0.08) !default;
+$global-large-box-shadow:         0 14px 25px rgba(0,0,0,0.16) !default;
+$global-xlarge-box-shadow:        0 28px 50px rgba(0,0,0,0.16) !default;
+
+// Spacings
+$global-margin:                   20px !default;
+$global-small-margin:             10px !default;
+$global-medium-margin:            40px !default;
+$global-large-margin:             70px !default;
+$global-xlarge-margin:            140px !default;
+
+$global-gutter:                   30px !default;
+$global-small-gutter:             15px !default;
+$global-medium-gutter:            40px !default;
+$global-large-gutter:             70px !default;
+
+// Controls
+$global-control-height:           40px !default;
+$global-control-small-height:     30px !default;
+$global-control-large-height:     55px !default;
+
+// Z-index
+$global-z-index:                  999 !default;
+
+/*--------------------------------------------------------------
+# Global Mixins
+--------------------------------------------------------------*/
+
+// SVG
+@mixin svg-fill($src, $color-default, $color-new, $property: background-image){
+
+	$escape-color-default:  escape($color-default) !default;
+	$escape-color-new:  escape("#{$color-new}") !default;
+
+	$data-uri:  data-uri('image/svg+xml;charset=UTF-8', "#{$src}") !default;
+	$replace-src:  replace("#{$data-uri}", "#{$escape-color-default}", "#{$escape-color-new}", "g") !default;
+
+	#{$property}: unquote($replace-src);
+}
+
+/*--------------------------------------------------------------
+# Import Normalize.css
+--------------------------------------------------------------*/
+
+@import "~normalize.css/normalize.css";
+
+/*--------------------------------------------------------------
+# Import Components
+--------------------------------------------------------------*/
+
+// Base
+@import "components/base.scss";
+
+// Elements
+@import "components/text.scss";
+@import "components/link.scss";
+@import "components/heading.scss";
+@import "components/divider.scss";
+@import "components/list.scss";
+@import "components/description-list.scss";
+@import "components/table.scss";
+@import "components/icon.scss";
+@import "components/form-range.scss";
+@import "components/form.scss"; // After: Icon, Form Range
+@import "components/button.scss";
+
+// Layout
+@import "components/columns.scss";
+@import "components/section.scss";
+@import "components/container.scss";
+@import "components/card.scss";
+
+// Common
+@import "components/close.scss"; // After: Icon
+@import "components/spinner.scss"; // After: Icon
+@import "components/totop.scss"; // After: Icon
+@import "components/alert.scss"; // After: Close
+@import "components/badge.scss";
+@import "components/label.scss";
+@import "components/article.scss"; // After: Subnav
+@import "components/comment.scss"; // After: Subnav
+@import "components/search.scss"; // After: Icon
+
+// Navs
+@import "components/pagination.scss";
+
+.loadingimg {
+	background: transparent url('../images/images-loading.png') no-repeat center center;
+}
