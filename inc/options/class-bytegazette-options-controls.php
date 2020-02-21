@@ -66,6 +66,76 @@ class ByteGazette_Options_Controls {
 	}
 
 	/**
+	 * Add input to a customizer section.
+	 *
+	 * @param string $setting_name The unique name of the setting to add.
+	 * @param string $panel_name The name of the section to add the control to.
+	 * @param array  $attributes The specific attributes for this form control.
+	 * @param int    $priority The control priority in the section.
+	 */
+	public static function add_input( $setting_name, $panel_name, $attributes = array(), $priority = 10 ) {
+		$screen_id = get_current_screen()->id;
+		$callback  = array( __CLASS__, 'do_settings_field_input_callback' );
+
+		$class       = isset( $attributes['class'] ) ? $attributes['class'] : null;
+		$type        = isset( $attributes['type'] ) ? $attributes['type'] : 'text';
+		$default     = isset( $attributes['default'] ) ? $attributes['default'] : null;
+		$help        = isset( $attributes['help'] ) ? (string) $attributes['help'] : null;
+		$description = isset( $attributes['description'] ) ? (string) $attributes['description'] : null;
+
+		$section = "bytegazette_$panel_name";
+		$id      = "bytegazette_options_$setting_name";
+		$label   = (string) isset( $attributes['label'] ) ? $attributes['label'] : '';
+
+		$args = array(
+			'id'          => $id,
+			'class'       => $class,
+			'type'        => $type,
+			'setting'     => $setting_name,
+			'label'       => $label,
+			'default'     => $default,
+			'help'        => $help,
+			'description' => $description,
+		);
+
+		add_settings_field( $id, $label, $callback, $screen_id, $section, $args );
+	}
+
+	/**
+	 * Add textbox to a customizer section.
+	 *
+	 * @param string $setting_name The unique name of the setting to add.
+	 * @param string $panel_name The name of the section to add the control to.
+	 * @param array  $attributes The specific attributes for this form control.
+	 * @param int    $priority The control priority in the section.
+	 */
+	public static function add_textbox( $setting_name, $panel_name, $attributes = array(), $priority = 10 ) {
+		$screen_id = get_current_screen()->id;
+		$callback  = array( __CLASS__, 'do_settings_field_textbox_callback' );
+
+		$type        = isset( $attributes['type'] ) ? $attributes['type'] : 'text';
+		$default     = isset( $attributes['default'] ) ? $attributes['default'] : null;
+		$help        = isset( $attributes['help'] ) ? (string) $attributes['help'] : null;
+		$description = isset( $attributes['description'] ) ? (string) $attributes['description'] : null;
+
+		$section = "bytegazette_$panel_name";
+		$id      = "bytegazette_options_$setting_name";
+		$label   = (string) isset( $attributes['label'] ) ? $attributes['label'] : '';
+
+		$args = array(
+			'id'          => $id,
+			'type'        => $type,
+			'setting'     => $setting_name,
+			'label'       => $label,
+			'default'     => $default,
+			'help'        => $help,
+			'description' => $description,
+		);
+
+		add_settings_field( $id, $label, $callback, $screen_id, $section, $args );
+	}
+
+	/**
 	 * Add checkbox to a customizer section.
 	 *
 	 * @param string $setting_name The unique name of the setting to add.
@@ -73,25 +143,29 @@ class ByteGazette_Options_Controls {
 	 * @param array  $attributes The specific attributes for this form control.
 	 * @param int    $priority The control priority in the section.
 	 */
-	public static function add_checkboxes( $setting_name, $panel_name, $attributes = array(), $priority = 10 ) {
+	public static function add_selection( $setting_name, $panel_name, $attributes = array(), $priority = 10 ) {
 		$screen_id = get_current_screen()->id;
-		$callback  = array( __CLASS__, 'do_settings_field_callback' );
+		$callback  = array( __CLASS__, 'do_settings_field_selection_callback' );
 
-		$description = (string) isset( $attributes['description'] ) ? $attributes['description'] : '';
-
-		$default = isset( $attributes['default'] ) && is_array( $attributes['default'] ) ? $attributes['default'] : array();
-		$choices = isset( $attributes['choices'] ) && is_array( $attributes['choices'] ) ? $attributes['choices'] : array();
+		$type        = isset( $attributes['type'] ) ? $attributes['type'] : 'select';
+		$default     = isset( $attributes['default'] ) ? $attributes['default'] : null;
+		$choices     = isset( $attributes['choices'] ) && is_array( $attributes['choices'] ) ? $attributes['choices'] : array();
+		$help        = isset( $attributes['help'] ) ? (string) $attributes['help'] : null;
+		$description = isset( $attributes['description'] ) ? (string) $attributes['description'] : null;
 
 		$section = "bytegazette_$panel_name";
 		$id      = "bytegazette_options_$setting_name";
 		$label   = (string) isset( $attributes['label'] ) ? $attributes['label'] : '';
 
 		$args = array(
-			'id'      => $id,
-			'setting' => $setting_name,
-			'label'   => $label,
-			'default' => $default,
-			'choices' => $choices,
+			'id'          => $id,
+			'type'        => $type,
+			'setting'     => $setting_name,
+			'label'       => $label,
+			'default'     => $default,
+			'choices'     => $choices,
+			'help'        => $help,
+			'description' => $description,
 		);
 
 		add_settings_field( $id, $label, $callback, $screen_id, $section, $args );
@@ -136,28 +210,151 @@ class ByteGazette_Options_Controls {
 	}
 
 	/**
-	 * Callback function for our example setting.
+	 * Callback function for input field settings.
 	 *
-	 * Creates a checkbox true/false option. Other types are surely possible.
+	 * @param array $args The input type and type arguments.
 	 */
-	public static function do_settings_field_callback( $args ) {
-		$option = ByteGazette::OPTIONS_SETTINGS;
-
+	public static function do_settings_field_input_callback( $args ) {
+		$option  = ByteGazette::OPTIONS_SETTINGS;
 		$id      = isset( $args['id'] ) ? $args['id'] : null;
+		$type    = isset( $args['type'] ) && in_array( $args['type'], array( 'number', 'password' ), true ) ? $args['type'] : 'text';
 		$setting = isset( $args['setting'] ) ? $args['setting'] : null;
 
 		if ( ! ( $id && $setting ) ) {
 			return;
 		}
 
+		$class       = isset( $args['class'] ) && $args['class'] ? (string) $args['class'] : null;
+		$default     = isset( $args['default'] ) ? $args['default'] : null;
+		$help        = isset( $args['help'] ) && $args['help'] ? (string) $args['help'] : null;
+		$placeholder = isset( $args['placeholder'] ) && $args['placeholder'] ? (string) $args['placeholder'] : null;
+		$description = isset( $args['description'] ) && $args['description'] ? (string) $args['description'] : null;
+
+		$name  = sprintf( '%s[%s]', $option, $setting );
+		$value = bytegazette_get_option( $setting, $default );
+
+		printf( '<input type="%1$s" class="%6$s" id="%2$s" name="%3$s" placeholder="%4$s" value="%5$s" />', esc_attr( $type ), esc_attr( $id ), esc_attr( $name ), esc_html( $placeholder ), esc_html( $value ), esc_attr( $class ) );
+
+		if ( $help ) {
+			printf( '<span class="helper"> %s</span>', esc_html( $help ) );
+		}
+
+		if ( $description ) {
+			printf( '<p class="description">%s</p>', esc_html( $description ) );
+		}
+	}
+
+	/**
+	 * Callback function for textbox settings.
+	 *
+	 * @param array $args The input type and type arguments.
+	 */
+	public static function do_settings_field_textbox_callback( $args ) {
+		$option  = ByteGazette::OPTIONS_SETTINGS;
+		$id      = isset( $args['id'] ) ? $args['id'] : null;
+		$type    = isset( $args['type'] ) && in_array( $args['type'], array( 'richtext', 'slim' ), true ) ? $args['type'] : 'textbox';
+		$setting = isset( $args['setting'] ) ? $args['setting'] : null;
+
+		if ( ! ( $id && $setting ) ) {
+			return;
+		}
+
+		$class       = 'nan';
+		$default     = isset( $args['default'] ) ? $args['default'] : null;
+		$help        = isset( $args['help'] ) && $args['help'] ? (string) $args['help'] : null;
+		$placeholder = isset( $args['placeholder'] ) && $args['placeholder'] ? (string) $args['placeholder'] : null;
+		$description = isset( $args['description'] ) && $args['description'] ? (string) $args['description'] : null;
+
+		$name  = sprintf( '%s[%s]', $option, $setting );
+		$value = bytegazette_get_option( $setting, $default );
+
+		printf( '<textarea class="%2$s" id="%1$s" name="%3$s" placeholder="%4$s" rows="5" cols="50">%5$s</textarea>', esc_attr( $id ), esc_attr( $class ), esc_attr( $name ), esc_html( $placeholder ), esc_html( $value ) );
+
+		if ( $help ) {
+			printf( '<span class="helper"> %s</span>', esc_html( $help ) );
+		}
+
+		if ( $description ) {
+			printf( '<p class="description">%s</p>', esc_html( $description ) );
+		}
+	}
+
+	/**
+	 * Callback function for selectables setting.
+	 *
+	 * @param array $args The selection type and type arguments.
+	 */
+	public static function do_settings_field_selection_callback( $args ) {
+		$id      = isset( $args['id'] ) ? $args['id'] : null;
+		$type    = isset( $args['type'] ) && in_array( $args['type'], array( 'checkbox', 'radio' ), true ) ? $args['type'] : 'select';
+		$setting = isset( $args['setting'] ) ? $args['setting'] : null;
+
+		if ( ! ( $id && $setting ) ) {
+			return;
+		}
+
+		$label       = (string) isset( $args['label'] ) ? $args['label'] : '';
+		$default     = isset( $args['default'] ) ? $args['default'] : null;
+		$choices     = isset( $args['choices'] ) && is_array( $args['choices'] ) ? $args['choices'] : array();
+		$help        = isset( $args['help'] ) && $args['help'] ? (string) $args['help'] : null;
+		$description = isset( $args['description'] ) && $args['description'] ? (string) $args['description'] : null;
+
+		switch ( $type ) {
+			case 'select':
+				self::do_settings_field_selection_cb_select( $id, $setting, $choices, $default );
+				break;
+			case 'radio':
+				self::do_settings_field_selection_cb_radio( $id, $setting, $choices, $default );
+				break;
+			case 'checkbox':
+				self::do_settings_field_selection_cb_checkbox( $id, $setting, $choices, $default );
+				break;
+		}
+
+		if ( $help ) {
+			printf( '<span class="helper"> %s</span>', esc_html( $help ) );
+		}
+
+		if ( $description ) {
+			printf( '<p class="description">%s</p>', esc_html( $description ) );
+		}
+	}
+
+	/**
+	 *
+	 */
+	private static function do_settings_field_selection_cb_select ( $id, $setting, array $choices, $default ) {
+		$option = ByteGazette::OPTIONS_SETTINGS;
+		$name   = sprintf( '%s[%s]', $option, $setting );
+		$value  = bytegazette_get_option( $setting, $default );
+
+		printf( '<select id="%1$s" name="%2$s">', esc_attr( $id ), esc_attr( $name ) );
+
+		foreach ( $choices as $choice => $choice_label ) {
+			$choice_id = sprintf( '%s_%s', $id, $choice );
+
+			printf( '<option id="%1$s" value="%2$s" %3$s /> %4$s</option>',
+				esc_attr( $choice_id ),
+				esc_attr( $choice ),
+				selected( $choice, $value, false ),
+				esc_html( $choice_label )
+			);
+		}
+
+		print( '</select>' );
+	}
+
+	/**
+	 *
+	 */
+	private static function do_settings_field_selection_cb_checkbox ( $id, $setting, array $choices, $default ) {
+		$option  = ByteGazette::OPTIONS_SETTINGS;
 		$name    = sprintf( '%s[%s]', $option, $setting );
-		$label   = (string) isset( $args['label'] ) ? $args['label'] : '';
-		$choices = isset( $args['choices'] ) && is_array( $args['choices'] ) ? $args['choices'] : array();
-		$default = isset( $args['default'] ) && is_array( $args['default'] ) ? $args['default'] : array();
+		$default = is_array( $default ) ? $default : array();
 		$values  = bytegazette_get_option( $setting, $default );
 		$values  = is_array( $values ) ? $values : $default;
 
-		printf( '<fieldset><legend class="screen-reader-text"><span>%s</span></legend>', esc_html( $label ) );
+		print( '<fieldset>' );
 
 		foreach ( $choices as $choice => $choice_label ) {
 			$choice_id    = sprintf( '%s_%s', $id, $choice );
@@ -173,6 +370,31 @@ class ByteGazette_Options_Controls {
 		}
 
 		printf( '<input type="hidden" id="%1$s" name="%2$s[_saved]" value="saved"></fieldset>', esc_attr( $id ), esc_attr( $name ) );
+	}
+
+	/**
+	 *
+	 */
+	private static function do_settings_field_selection_cb_radio ( $id, $setting, array $choices, $default ) {
+		$option = ByteGazette::OPTIONS_SETTINGS;
+		$name   = sprintf( '%s[%s]', $option, $setting );
+		$value  = bytegazette_get_option( $setting, $default );
+
+		print( '<fieldset>' );
+
+		foreach ( $choices as $choice => $choice_label ) {
+			$choice_id    = sprintf( '%s_%s', $id, $choice );
+
+			printf( '<label for="%1$s"><input id="%1$s" name="%2$s" type="radio" value="%3$s" class="code" %4$s /> %5$s</label><br>',
+				esc_attr( $choice_id ),
+				esc_attr( $name ),
+				esc_attr( $choice ),
+				checked( $choice, $value, false ),
+				esc_html( $choice_label )
+			);
+		}
+
+		print( '</fieldset>' );
 	}
 
 }

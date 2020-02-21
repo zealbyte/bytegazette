@@ -2,12 +2,13 @@
 /**
  * Template part for displaying post's next & previous posts links.
  *
- * @package realistic
+ * @package bytegazette
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	// Exit if accessed directly.
+	exit;
+}
 
-if ( !get_theme_mod( 'next_prev_post', '1' ) ) {
-	return '';
-} ?>
-
+previous_post_link( '<div class="left-button">%link</div>', esc_html__( 'Previous Post', 'bytegazette' ) );
+next_post_link( '<div class="right-button">%link</div>', esc_html__( 'Next Post', 'bytegazette' ) );

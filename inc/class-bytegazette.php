@@ -37,69 +37,99 @@ class ByteGazette {
 	const NONCE            = 'bytegazette-entropy-nonce';
 
 	// Theme resources.
-	const URL_AUTHOR                  = 'https://zealbyte.org/';
-	const URL_ABOUT                   = 'https://zealbyte.org/projects/bytegazette/about';
-	const URL_BYTEGAZETTE_GUIDE       = 'https://zealbyte.org/projects/bytegazette/guide';
-	const URL_BYTEGAZETTE_FAQ         = 'https://zealbyte.org/projects/bytegazette/faq';
-	const URL_BYTEGAZETTE_HOW_TO      = 'https://zealbyte.org/projects/bytegazette/external-editor';
-	const URL_FEEDBACK                = 'https://zealbyte.org/projects/bytegazette/external-editor';
-	const URL_SUPPORT                 = 'https://zealbyte.org/projects/bytegazette/external-editor';
-	const URL_BYTEGAZETTE_INTEGRATION = 'https://zealbyte.org/projects/bytegazette/integration';
-	const URL_DEFAULT_UIKIT_JS        = 'https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.20/js/uikit.min.js';
-	const URL_DEFAULT_UIKIT_ICONS     = 'https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.20/js/uikit-icons.min.js';
-	const URL_DEFAULT_UIKIT_STYLE     = 'https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.20/css/uikit.min.css';
+	const URL_AUTHOR      = 'https://zealbyte.org/';
+	const URL_ABOUT       = 'https://zealbyte.org/projects/bytegazette/about';
+	const URL_COMMUNITY   = 'https://zealbyte.org/community/bytegazette';
+	const URL_HOWTO       = 'https://zealbyte.org/guides/bytegazette';
+	const URL_FEEDBACK    = 'https://wordpress.org/support/theme/bytegazette/reviews/';
+	const URL_INTEGRATION = 'https://zealbyte.org/guides/bytegazette/integration';
+
+	// Default colors.
+	const BODY_FG_COLOR                       = '#666666';
+	const BODY_BG_COLOR                       = '#ffffff';
+	const LINK_FG_COLOR                       = '#1e87f0';
+	const HEADING_FG_COLOR                    = '#333333';
+	const EMPHASIS_FG_COLOR                   = '#f0506e';
+	const BORDER_COLOR                        = '#dddddd';
+	const MUTE_FG_COLOR                       = '#999999';
+	const EVEN_BG_COLOR                       = '#ffffff';
+	const ODD_BG_COLOR                        = '#fafafa';
+	const HEADER_BG_COLOR                     = 'transparent';
+	const HEADER_LINK_FG_COLOR                = '#0022ff';
+	const HEADER_TITLE_FG_COLOR               = '#234687';
+	const HEADER_NAV_FG_COLOR                 = '#333333';
+	const HEADER_NAV_BG_COLOR                 = '#512DA8';
+	const HEADER_NAV_LINK_FG_COLOR            = '#ffffff';
+	const HEADER_NAV_ITEM_BG_COLOR            = '#512DA8';
+	const HEADER_NAV_ITEM_FG_COLOR            = '#ffffff';
+	const HEADER_NAV_ITEM_CURRENT_BG_COLOR    = '#512DA8';
+	const HEADER_NAV_ITEM_CURRENT_FG_COLOR    = '#090909';
+	const HEADER_SUBNAV_BG_COLOR              = '#ffffff';
+	const HEADER_SUBNAV_ITEM_BG_COLOR         = '#ffffff';
+	const HEADER_SUBNAV_ITEM_FG_COLOR         = '#333333';
+	const HEADER_SUBNAV_ITEM_CURRENT_BG_COLOR = '#ffffff';
+	const HEADER_SUBNAV_ITEM_CURRENT_FG_COLOR = '#999999';
+	const FOOTER_FG_COLOR                     = '#cccccc';
+	const FOOTER_BG_COLOR                     = '#455A64';
+	const FOOTER_HEADING_FG_COLOR             = '#ffffff';
+	const FOOTER_LINK_FG_COLOR                = '#ffffff';
+	const FOOTER_NAV_FG_COLOR                 = '#cccccc';
+	const FOOTER_NAV_BG_COLOR                 = '#263238';
+	const FOOTER_NAV_LINK_FG_COLOR            = '#ffffff';
+	const FOOTER_NAV_HEADING_FG_COLOR         = '#ffffff';
+
+	// The default navigation bar options.
+	const NAV_SHOW_SEARCH    = 1;
+	const NAV_STICKY_SETTING = 'sticktop';
 
 	// The default theme options.
-	const DEFAULT_DATE_FORMAT              = 'default';
-	const DEFAULT_SIDEBAR_LAYOUT           = 'right';
-	const DEFAULT_SIDEBAR_WIDTH            = '1_3';
-	const DEFAULT_CONTENT_LAYOUT           = 'default';
-	const DEFAULT_ARCHIVE_DISPLAY          = 'list';
-	const DEFAULT_HOME_DISPLAY             = 'grid';
-	const DEFAULT_FEATURED_POSTS_TAG       = 'featured';
-	const DEFAULT_FEATURED_POSTS_COUNT     = 10;
-	const DEFAULT_FEATURED_EXCERPT_LENGTH  = 12;
-	const DEFAULT_SLIDESHOW_POSTS_TAG      = 'showit';
-	const DEFAULT_SLIDESHOW_POSTS_COUNT    = 4;
-	const DEFAULT_SLIDESHOW_EXCERPT_LENGTH = 21;
+	const DATE_FORMAT    = 'default';
+	const SIDEBAR_WIDTH  = '1_3';
+	const SIDEBAR_LAYOUT = 'right';
+	const CONTENT_LAYOUT = 'grid';
 
-	// The default home page options.
-	const DEFAULT_HOME_PAGE_BANNER = '';
+	// Featured slider options.
+	const FEATURED_POSTS_TAG      = 'featured';
+	const FEATURED_POSTS_COUNT    = 10;
+	const FEATURED_EXCERPT_LENGTH = 12;
 
-	// The default header options.
-	const DEFAULT_HEADER_BG_COLOR     = '#ffffff';
-	const DEFAULT_HEADER_FG_CLASS     = 'uk-dark';
-	const DEFAULT_HEADER_NAV_BG_COLOR = '#512DA8';
-	const DEFAULT_HEADER_NAV_FG_CLASS = 'uk-light';
+	// Slideshow options.
+	const SLIDESHOW_POSTS_TAG      = 'showit';
+	const SLIDESHOW_POST_SHOW      = 'both';
+	const SLIDESHOW_POSTS_COUNT    = 4;
+	const SLIDESHOW_EXCERPT_LENGTH = 21;
 
-	// The default footer options.
-	const DEFAULT_FOOTER_UPPER_BG_COLOR = '#455A64';
-	const DEFAULT_FOOTER_LOWER_BG_COLOR = '#263238';
-	const DEFAULT_FOOTER_FG_CLASS       = 'uk-light';
-	const DEFAULT_FOOTER_LOGO           = '';
+	// The default alternate logos.
+	const NAVIGATION_ICON_LOGO = '';
+	const FOOTER_LOGO          = '';
 
 	// The default post options.
-	const DEFAULT_POST_BREADCRUMBS    = 1;
-	const DEFAULT_POST_META           = 1;
-	const DEFAULT_POST_RELATED        = 1;
-	const DEFAULT_POST_RELATED_COUNT  = 4;
-	const DEFAULT_POST_RELATED_MAX    = 20;
-	const DEFAULT_POST_RELATED_METHOD = 'tags';
-	const DEFAULT_POST_NEXT_PREV      = 1;
-	const DEFAULT_POST_AUTHOR_BOX     = 1;
+	const POST_FEATURED_IMAGE = 1;
+	const POST_DATE           = 1;
+	const POST_AUTHOR         = 1;
+	const POST_TAGS           = 0;
+	const POST_CATEGORIES     = 0;
+	const POST_AUTHOR_BOX     = 1;
+	const POST_NEXT_PREV      = 1;
+	const POST_RELATED        = 0;
+	const POST_RELATED_COUNT  = 6;
+	const POST_RELATED_MAX    = 20;
+	const POST_RELATED_METHOD = 'tags';
+
+	// The default comment options.
+	const COMMENT_PAGINATION  = 'both';
+	const COMMENT_LIST_TAG    = 'ol';
+	const COMMENT_AVATAR_SIZE = '48';
+	const COMMENT_SHORT_PING  = true;
 
 	// The default archive options.
-	const DEFAULT_ARCHIVES_META           = 1;
-	const DEFAULT_ARCHIVES_EXCERPT_LENGTH = 30;
-
-	// The default theme background options.
-	const DEFAULT_BG_COLOR           = '#f7f7f7';
-	const DEFAULT_BACKGROUND_OPTION  = 'none';
-	const DEFAULT_BACKGROUND_PATTERN = '';
-	const DEFAULT_BG_REPEAT          = 'no-repeat';
-	const DEFAULT_BG_SIZE            = 'cover';
-	const DEFAULT_BG_ATTACHMENT      = 'scroll';
-	const DEFAULT_BG_POSITION        = 'center center';
+	const ARCHIVES_FEATURED_IMAGE = 1;
+	const ARCHIVES_AUTHOR         = 1;
+	const ARCHIVES_DATE           = 1;
+	const ARCHIVES_MORE_LINK      = 1;
+	const ARCHIVES_CATEGORY_LINK  = 1;
+	const ARCHIVES_COMMENT_COUNT  = 1;
+	const ARCHIVES_EXCERPT_LENGTH = 30;
 
 	/**
 	 * Determine if the theme is considered "configured" or not.
@@ -150,7 +180,7 @@ class ByteGazette {
 	 * Return the theme author text.
 	 */
 	public static function get_theme_author_text() {
-		return __( 'Byte Gazette theme by', 'bytegazette' ) . ' <a href="' . ByteGazette::URL_AUTHOR . '">ZealByte</a>.';
+		return __( 'Byte Gazette theme by ', 'bytegazette' ) . ' <a href="' . ByteGazette::URL_AUTHOR . '">ZealByte</a>.';
 	}
 
 	/**
@@ -159,138 +189,14 @@ class ByteGazette {
 	public static function get_theme_customizer_options() {
 		return array(
 			'site'       => true,
-			'homepage'   => true,
-			'header'     => true,
+			'colors'     => true,
+			'front'      => true,
+			'navigation' => true,
 			'footer'     => true,
 			'posts'      => true,
+			'comments'   => true,
 			'archives'   => true,
-			'background' => true,
 		);
 	}
 
-	/**
-	 * Get the list of default social icons.
-	 */
-	public static function get_social_icons_list() {
-		$contact = array(
-			'rss' => array(
-				'label' => esc_html__( 'RSS', 'bytegazette' ),
-				'icon'  => 'rss',
-			),
-			'email' => array(
-				'label' => esc_html__( 'Email', 'bytegazette' ),
-				'icon'  => 'mail',
-			),
-		);
-
-		$social = array(
-			'500px' => array(
-				'label' => esc_html__( '500px', 'bytegazette' ),
-				'icon'  => '500px',
-				'url'   => 'https://500px.com',
-			),
-			'behance' => array(
-				'label' => esc_html__( 'Behance', 'bytegazette' ),
-				'icon'  => 'behance',
-				'url'   => 'https://',
-			),
-			'dribbble' => array(
-				'label' => esc_html__( 'Dribbble', 'bytegazette' ),
-				'icon'  => 'dribbble',
-				'url'   => 'https://',
-			),
-			'facebook' => array(
-				'label' => esc_html__( 'Facebook', 'bytegazette' ),
-				'icon'  => 'facebook',
-				'url'   => 'https://',
-			),
-			'flickr' => array(
-				'label' => esc_html__( 'Flickr', 'bytegazette' ),
-				'icon'  => 'flickr',
-				'url'   => 'https://',
-			),
-			'foursquare' => array(
-				'label' => esc_html__( 'Foursquare', 'bytegazette' ),
-				'icon'  => 'foursquare',
-				'url'   => 'https://',
-			),
-			'github' => array(
-				'label' => esc_html__( 'GitHub', 'bytegazette' ),
-				'icon'  => 'github-alt',
-				'url'   => 'https://',
-			),
-			'gitter' => array(
-				'label' => esc_html__( 'Gitter', 'bytegazette' ),
-				'icon'  => 'gitter',
-				'url'   => 'https://',
-			),
-			'google_plus' => array(
-				'label' => esc_html__( 'Google+', 'bytegazette' ),
-				'icon'  => 'google-plus',
-				'url'   => 'https://',
-			),
-			'instagram' => array(
-				'label' => esc_html__( 'Instagram', 'bytegazette' ),
-				'icon'  => 'instagram',
-				'url'   => 'https://',
-			),
-			'linkedin' => array(
-				'label' => esc_html__( 'LinkedIn', 'bytegazette' ),
-				'icon'  => 'linkedin',
-				'url'   => 'https://',
-			),
-			'pinterest' => array(
-				'label' => esc_html__( 'Pinterest', 'bytegazette' ),
-				'icon'  => 'pinterest',
-				'url'   => 'https://',
-			),
-			'soundcloud' => array(
-				'label' => esc_html__( 'Soundcloud', 'bytegazette' ),
-				'icon'  => 'soundcloud',
-				'url'   => 'https://',
-			),
-			'tripadvisor' => array(
-				'label' => esc_html__( 'TripAdvisor', 'bytegazette' ),
-				'icon'  => 'tripadvisor',
-				'url'   => 'https://',
-			),
-			'tumblr' => array(
-				'label' => esc_html__( 'Tumblr', 'bytegazette' ),
-				'icon'  => 'tumblr',
-				'url'   => 'https://',
-			),
-			'twitter' => array(
-				'label' => esc_html__( 'Twitter', 'bytegazette' ),
-				'icon'  => 'twitter',
-				'url'   => 'https://',
-				'share' => true,
-				'attrs' => array(
-					'href'          => 'https://twitter.com/intent/tweet',
-					'data-size'     => 'large',
-					'data-text'     => 'custom share text',
-					'data-url'      => '{{url}}',
-					'data-hashtags' => 'example,demo',
-					'data-via'      => 'twitterdev',
-					'data-related'  => 'twitterapi,twitter',
-				),
-			),
-			'vimeo' => array(
-				'label' => esc_html__( 'Vimeo', 'bytegazette' ),
-				'icon'  => 'vimeo',
-				'url'   => 'https://',
-			),
-			'yelp' => array(
-				'label' => esc_html__( 'Yelp', 'bytegazette' ),
-				'icon'  => 'yelp',
-				'url'   => 'https://',
-			),
-			'youtube' => array(
-				'label' => esc_html__( 'YouTube', 'bytegazette' ),
-				'icon'  => 'youtube',
-				'url'   => 'https://',
-			),
-		);
-
-		return apply_filters( 'bytegazette_get_social_icons_list', array_merge( $contact, $social ) );
-	}
 }

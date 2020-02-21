@@ -17,22 +17,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 $bytegazette_description = get_bloginfo( 'description', 'display' );
 ?>
 
-<div class="uk-inline-clip">
-
-	<div class="site-branding uk-position-center-left">
-		<a class="uk-logo uk-float-left" href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo( 'name' ); ?>" rel="home">
-			<?php if ( has_custom_logo() ) : ?>
+	<?php if ( has_custom_logo() ) : ?>
+		<div class="site-logo">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo( 'name' ); ?>" rel="home">
 				<?php the_custom_logo(); ?>
-			<?php endif; ?>
+			</a>
+		</div>
+	<?php endif; ?>
 
+	<div class="site-title">
+		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo( 'name' ); ?>" rel="home">
 			<?php bloginfo( 'name' ); ?>
 		</a>
 	</div>
 
 	<?php if ( $bytegazette_description || is_customize_preview() ) : ?>
-		<div class="site-tagline uk-position-center-right">
+		<div class="site-description">
 			<?php echo esc_html( $bytegazette_description ); ?>
 		</div>
 	<?php endif; ?>
-
-</div>

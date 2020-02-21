@@ -1,12 +1,10 @@
 <?php
 /**
- * The main template file.
+ * The front page template file
  *
- * This is the most generic template file in a WordPress theme
- * and one of the two required files for a theme (the other being style.css).
- * It is used to display a page when nothing more specific matches a query.
- * E.g., it puts together the home page when no home.php file exists.
- * Learn more: http://codex.wordpress.org/Template_Hierarchy
+ * If the user has selected a static page for their homepage, this is what will
+ * appear.
+ * Learn more: https://codex.wordpress.org/Template_Hierarchy
  *
  * @package bytegazette
  */
@@ -16,9 +14,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$bytegazette_post_column_style = is_singular() ? 'col s12' : 'col s12 m6 l6';
+$bytegazette_front_layout      = get_theme_mod( 'front_layout', ByteGazette::CONTENT_LAYOUT );
+$bytegazette_post_column_style = 'list' === $bytegazette_front_layout || is_singular() ? 's12' : 's12 m6 l6';
 
 get_header();
+
+if ( ! is_paged() ) {
+	get_template_part( 'template-parts/sections/featured', 'slideshow' );
+	get_template_part( 'template-parts/sections/featured', 'slider' );
+}
 ?>
 
 	<div id="primary" class="content-area">
@@ -27,23 +31,15 @@ get_header();
 		<?php
 		if ( have_posts() ) :
 
-			if ( is_home() && ! is_front_page() ) :
-				?>
-				<header>
-					<h1 class="page-title"><?php single_post_title(); ?></h1>
-				</header>
-				<?php
-			endif;
-
 			?>
-			<div class="grid">
+			<div class="<?php echo esc_attr( $bytegazette_front_layout ); ?>">
 			<?php
 
 			/* Start the Loop */
 			while ( have_posts() ) :
 
 				?>
-				<div class="grid-item <?php echo esc_attr( $bytegazette_post_column_style ); ?>">
+				<div class="grid-item col <?php echo esc_attr( $bytegazette_post_column_style ); ?>">
 				<?php
 
 				the_post();
@@ -62,7 +58,7 @@ get_header();
 			endwhile;
 
 			?>
-				<div class="empty-item <?php echo esc_attr( $bytegazette_post_column_style ); ?>"></div>
+				<div class="empty-item col <?php echo esc_attr( $bytegazette_post_column_style ); ?>"></div>
 			</div>
 			<?php
 

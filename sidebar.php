@@ -12,12 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! is_active_sidebar( 'sidebar' ) ) {
-	return;
-}
+$bytegazette_sidebar_layout = bytegazette_get_sidebar_layout();
 ?>
 
 <div id="secondary" class="widget-area" role="complementary">
-	<?php dynamic_sidebar( 'sidebar' ); ?>
+	<?php
+	if ( is_active_sidebar( 'sidebar' ) && 'none' !== $bytegazette_sidebar_layout ) {
+		dynamic_sidebar( 'sidebar' );
+	}
+	?>
 </div><!-- #secondary -->
 

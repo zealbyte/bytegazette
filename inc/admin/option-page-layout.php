@@ -44,23 +44,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php endforeach; ?>
 	</h2>
 
-	<div class="manage-menus">
-		<div class="alignleft">
-			<a class="button">Action</a>
-		</div>
-		<div class="alignright">
-			<a class="button">Menu</a>
-		</div>
-	</div>
+	<form action="options.php" method="post">
 
-	<div class="fx-settings-meta-box-wrap">
-		<form action="options.php" method="post">
+		<div class="manage-menus">
+			<div class="alignleft">
+				<?php submit_button( esc_attr( 'Save' ), 'primary', 'submit', false ); ?>
+			</div>
+			<div class="alignright">
+				<a href="" class="button"><?php esc_html_e( 'Import', 'bytegazette' ); ?></a>
+				<a href="" class="button"><?php esc_html_e( 'Export', 'bytegazette' ); ?></a>
+			</div>
+		</div>
+
+		<div class="fx-settings-meta-box-wrap">
 			<input type="hidden" name="action" value="some-action">
 			<?php wp_nonce_field( ByteGazette::NONCE ); ?>
 			<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 			<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
-
-			<!-- <input name="bytegazette_display_options[submit-<?php echo esc_attr( $current_page ); ?>]" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Settings', 'bytegazette' ); ?>" /> -->
 
 			<div id="poststuff">
 				<div id="post-body" class="metabox-holder columns-<?php echo 1 === get_current_screen()->get_columns() ? '1' : '2'; ?>">
@@ -85,18 +85,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div> <!-- #post-body -->
 				<br class="clear">
 			</div> <!-- #poststuff -->
-		</form>
-	</div>
+		</div>
+
+	</form>
 
 	<div>
 		<hr>
 		<p class="alignleft">
-			<a target="_blank" href="<?php echo esc_url( ByteGazette::URL_FEEDBACK ); ?>"><?php esc_html_e( 'Feedback', 'bytegazette' ); ?></a> |
-			<a target="_blank" href="<?php echo esc_url( ByteGazette::URL_ABOUT ); ?>"><?php esc_html_e( 'About', 'bytegazette' ); ?></a> |
-			<a target="_blank" href="<?php echo esc_url( ByteGazette::URL_SUPPORT ); ?>"><?php esc_html_e( 'Community', 'bytegazette' ); ?></a>
+			<?php
+			/* translators: 1: theme name, 2: theme author name, 3: theme version, 4: author URL. */
+			printf( wp_kses( __( '%1$s theme version %3$s by <a href="%4$s">%2$s</a>', 'bytegazette' ), array( 'a' => array( 'href' => array() ) ) ), 'Byte Gazette', 'ZealByte', esc_attr( BYTEGAZETTE_THEME_VERSION ), esc_url( ByteGazette::URL_AUTHOR ) );
+			?>
 		</p>
 		<p class="alignright">
-			<?php echo wp_kses_post( ByteGazette::get_theme_author_text() ); ?>
+			<a target="_blank" href="<?php echo esc_url( ByteGazette::URL_FEEDBACK ); ?>"><?php esc_html_e( 'Feedback', 'bytegazette' ); ?></a> |
+			<a target="_blank" href="<?php echo esc_url( ByteGazette::URL_COMMUNITY ); ?>"><?php esc_html_e( 'Community', 'bytegazette' ); ?></a> |
+			<a target="_blank" href="<?php echo esc_url( ByteGazette::URL_ABOUT ); ?>"><?php esc_html_e( 'About', 'bytegazette' ); ?></a>
 		</p>
 		<br class="clear">
 	</div>

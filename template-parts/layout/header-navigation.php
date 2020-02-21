@@ -14,14 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$bytegazette_navigation_logo = get_theme_mod( 'navigation_logo', ByteGazette::DEFAULT_FOOTER_LOGO );
+$bytegazette_navigation_logo = get_theme_mod( 'navigation_icon_logo', ByteGazette::NAVIGATION_ICON_LOGO );
 ?>
 
 <nav class="navbar">
 	<?php if ( ! empty( $bytegazette_navigation_logo ) ) : ?>
 		<div id="navigation-branding">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo( 'name' ); ?>" rel="nofollow">
-				<img src="<?php echo esc_url( $bytegazette_navigation_logo ); ?>" alt="<?php bloginfo( 'name' ); ?>" />
+				<?php echo wp_get_attachment_image( $bytegazette_navigation_logo ); ?>
 			</a>
 		</div>
 	<?php endif; ?>
@@ -45,7 +45,7 @@ $bytegazette_navigation_logo = get_theme_mod( 'navigation_logo', ByteGazette::DE
 
 		<div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: 0">
 			<form role="search" method="get" class="search-form uk-search-navbar uk-width-1-1@m uk-width-1-2@s" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<input class="search-field uk-search-input" type="search" id="search-field" name="s" placeholder="Search..." value="" autofocus>
+				<input class="search-field uk-search-input" type="search" id="search-field" name="s" placeholder="Search..." value="<?php echo esc_html( get_search_query() ); ?>" autofocus>
 			</form>
 		</div>
 	</div>

@@ -122,7 +122,8 @@ class ByteGazette_Admin_Options {
 		$request_page = filter_input( INPUT_GET, 'view', FILTER_SANITIZE_STRING );
 		$page         = (bool) $request_page ? $request_page : self::get_default_page();
 
-		if ( array_key_exists( $page, self::get_pages() ) || 'firstrun' === $page ) {
+		if ( array_key_exists( $page, self::get_pages() )
+			|| in_array( $page, array( 'firstrun', 'raw' ), true ) ) {
 			return $page;
 		} else {
 			return null;
@@ -161,7 +162,7 @@ class ByteGazette_Admin_Options {
 			self::$pages = apply_filters( 'bytegazette_options_pages', $pages );
 		}
 
-		return self::$pages;
+		return (array) self::$pages;
 	}
 
 	/**
@@ -177,6 +178,10 @@ class ByteGazette_Admin_Options {
 			$current = array();
 		}
 
+		if ( ! is_array( $input ) ) {
+			return $current;
+		}
+
 		return array_merge( $current, $input );
 	}
 
@@ -188,9 +193,6 @@ class ByteGazette_Admin_Options {
 		$local_path  = ( get_template_directory() . $script_path );
 
 		if ( is_file( $local_path ) ) {
-			$namespace = ByteGazette_Admin_Api::API_NAMESPACE . ByteGazette_Admin_Api::API_VERSION;
-			$api_url   = rest_url( $namespace, 'json' );
-
 			wp_register_script(
 				'bytegazette-admin-bundle',
 				get_template_directory_uri() . $script_path,
@@ -202,7 +204,6 @@ class ByteGazette_Admin_Options {
 			wp_localize_script('bytegazette-admin-bundle', 'bytegazetteData', array(
 				'nonce'       => wp_create_nonce( 'wp_rest' ),
 				'hook_suffix' => self::$hook_suffix,
-				'ajax_base'   => esc_url_raw( defined( 'BYTEGAZETTE_ADMIN_AJAX_BASE' ) ? BYTEGAZETTE_ADMIN_AJAX_BASE : $api_url ),
 				'basic_auth'  => defined( 'BYTEGAZETTE_ADMIN_AJAX_BASIC_AUTH' ) ? BYTEGAZETTE_ADMIN_AJAX_BASIC_AUTH : null,
 			) );
 		} else {
@@ -407,7 +408,7 @@ class ByteGazette_Admin_Options {
 		if ( $page ) {
 			do_action_ref_array( 'bytegazette_theme_options_page', array( $page ) );
 		} else {
-			self::render( '404', array() );
+			self::render( '404' );
 		}
 	}
 
@@ -420,7 +421,7 @@ class ByteGazette_Admin_Options {
 	protected static function render( $page ) {
 		$current_page = $page;
 
-		if ( in_array( $name, array( '404', 'firstrun' ), true ) ) {
+		if ( in_array( $page, array( '404', 'firstrun', 'raw' ), true ) ) {
 			include get_template_directory() . "/inc/admin/option-page-$page.php";
 		} else {
 			include get_template_directory() . '/inc/admin/option-page-layout.php';

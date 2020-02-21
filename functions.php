@@ -31,6 +31,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Define default strings.
+define( 'BYTEGAZETTE_THEME_VERSION', '1.0.0' );
+define( 'BYTEGAZETTE_STRING_FEATURED_POSTS', __( 'Featured', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_ABOUT_AUTHOR', __( 'About the author', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_RELATED_POSTS', __( 'Related Posts', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_COMMENTS', __( 'Comments', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_REPLY', __( 'Add a Comment', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_ADD_REPLY', __( 'Add Comment', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_ARCHIVES_PREVIOUS', __( 'Previous', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_ARCHIVES_NEXT', __( 'Next', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_POST_PREVIOUS', __( 'Previous Post', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_POST_NEXT', __( 'Next Post', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_COMMENTS_PREVIOUS', __( 'Older Comments', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_COMMENTS_NEXT', __( 'Newer Comments', 'bytegazette' ) );
+define( 'BYTEGAZETTE_STRING_COMMENTS_CLOSED', __( 'Comments are closed', 'bytegazette' ) );
+
+
 // Default options and global methods.
 require_once get_template_directory() . '/inc/class-bytegazette.php';
 
@@ -74,10 +91,7 @@ if ( ! function_exists( 'bytegazette_setup' ) ) :
 		add_theme_support( 'post-formats', apply_filters( 'bytegazette_custom_post_formats', array(
 			'aside',
 			'gallery',
-			'link',
 			'image',
-			'quote',
-			'status',
 			'video',
 			'audio',
 		) ) );
@@ -88,8 +102,8 @@ if ( ! function_exists( 'bytegazette_setup' ) ) :
 			//'default-image'      => get_template_directory_uri() . 'images/default-header.jpg',
 			'default-image'      => '',
 			'uploads'            => true,
-			'default-text-color' => '000000',
-			'width'              => 1000,
+			'default-text-color' => ByteGazette::HEADING_FG_COLOR,
+			'width'              => 4000,
 			'height'             => 100,
 			'flex-width'         => true,
 			'flex-height'        => true,
@@ -97,8 +111,8 @@ if ( ! function_exists( 'bytegazette_setup' ) ) :
 
 		// Set up the WordPress core custom background feature.
 		add_theme_support( 'custom-background', apply_filters( 'bytegazette_custom_background_args', array(
-			'default-color' => 'ffffff',
 			'default-image' => '',
+			'default-color' => ByteGazette::BODY_BG_COLOR,
 		) ) );
 
 		// Add support for core custom logo.
@@ -150,7 +164,7 @@ function bytegazette_custom_image_sizes( array $sizes ) {
 
 	if ( ! isset( $sizes['featured-card'] ) ) {
 		$sizes['featured-card'] = array(
-			'width'  => 400,
+			'width'  => 420,
 			'height' => 240,
 			'crop'   => true,
 		);
@@ -158,16 +172,24 @@ function bytegazette_custom_image_sizes( array $sizes ) {
 
 	if ( ! isset( $sizes['featured-list'] ) ) {
 		$sizes['featured-list'] = array(
-			'width'  => 256,
-			'height' => 256,
+			'width'  => 240,
+			'height' => 240,
+			'crop'   => true,
+		);
+	}
+
+	if ( ! isset( $sizes['slide'] ) ) {
+		$sizes['slide'] = array(
+			'width'  => 1280,
+			'height' => 400,
 			'crop'   => true,
 		);
 	}
 
 	if ( ! isset( $sizes['jumbo'] ) ) {
 		$sizes['large'] = array(
-			'width'  => 1200,
-			'height' => 1200,
+			'width'  => 1280,
+			'height' => 1280,
 			'crop'   => true,
 		);
 	}
@@ -187,7 +209,7 @@ function bytegazette_content_width() {
 	// This variable is intended to be overruled from themes.
 	// Open WPCS issue: {@link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1043}.
 	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-	$GLOBALS['content_width'] = apply_filters( 'bytegazette_content_width', 640 );
+	$GLOBALS['content_width'] = apply_filters( 'bytegazette_content_width', 1024 );
 }
 add_action( 'after_setup_theme', 'bytegazette_content_width', 0 );
 
@@ -202,7 +224,7 @@ function bytegazette_widgets_init() {
 		'id'            => 'sidebar',
 		'description'   => esc_html__( 'The primary always visible sidebar.', 'bytegazette' ),
 		'class'         => '',
-		'before_widget' => '<section id="%1$s" class="widget sidebar-widget uk-section-xsmall %2$s">',
+		'before_widget' => '<section id="%1$s" class="widget sidebar-widget %2$s">',
 		'after_widget'  => '</section>',
 		'before_title'  => '<h4 class="section-title widget-title uk-heading-line uk-text-bold"><span>',
 		'after_title'   => '</span></h4>',
@@ -213,7 +235,7 @@ function bytegazette_widgets_init() {
 		'id'            => 'drawer',
 		'description'   => esc_html__( 'The widget area for the drawer menu.', 'bytegazette' ),
 		'class'         => '',
-		'before_widget' => '<div id="%1$s" class="drawer-widget %2$s uk-panel">',
+		'before_widget' => '<div id="%1$s" class="widget drawer-widget %2$s">',
 		'after_widget'  => '</div><hr>',
 		'before_title'  => '<h4 class="section-title widget-title">',
 		'after_title'   => '</h4>',
@@ -291,9 +313,6 @@ add_action( 'init', 'bytegazette_load_theme_features' );
 function bytegazette_load_theme_admin() {
 	$basepath       = get_template_directory() . '/inc/admin/';
 	$admin_features = array(
-		// Admin API.
-		'api',
-
 		// Customizer additions.
 		'customizer',
 

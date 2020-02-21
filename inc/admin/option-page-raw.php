@@ -39,7 +39,17 @@ $bytegazette_theme_mods  = get_option( $bytegazette_mods_option );
 
 <div>
 
-	<h2>The Byte Gazette</h2>
+	<h2>Raw Theme Options</h2>
+
+	<h3>Theme Mods</h3>
+	<pre>
+		<?php print_r( $bytegazette_theme_mods ); ?>
+	</pre>
+
+	<h3>Theme Settings</h3>
+	<pre>
+		<?php print_r( $bytegazette_options_settings ); ?>
+	</pre>
 
 </div>
 

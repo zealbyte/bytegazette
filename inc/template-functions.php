@@ -30,52 +30,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Get an option setting value or default if the setting was not found.
- *
- * @param string $option_name The name of the option to get.
- * @param mixed  $default_value The default value for the option setting.
- * @global $bytegazette_options_settings;
- * @return mixed The setting value or default.
- */
-function bytegazette_get_option( $option_name, $default_value = null ) {
-	global $bytegazette_options_settings;
-
-	if ( empty( $bytegazette_options_settings ) ) {
-		$bytegazette_options_settings = get_option( ByteGazette::OPTIONS_SETTINGS, array() );
-	}
-
-	if ( isset( $bytegazette_options_settings[ $option_name ] ) ) {
-		return $bytegazette_options_settings[ $option_name ];
-	}
-
-	return $default_value;
-}
-
-/**
- * Set on option setting value.
- *
- * @param string $option_name The name of the option to set.
- * @param mixed  $value The setting value to set.
- * @global $bytegazette_options_settings;
- * @return bool Weather the setting was modified or not.
- */
-function bytegazette_set_option( $option_name, $value ) {
-	global $bytegazette_options_settings;
-
-	$old_val = bytegazette_get_option( $option_name );
-
-	if ( $old_val !== $value ) {
-		$bytegazette_options_settings[ $option_name ] = $value;
-
-		set_option( ByteGazette::OPTIONS_SETTINGS, $byte_gazette_options_settings );
-
-		return true;
-	}
-
-	return false;
-}
-
-/**
  * Adds custom classes to the array of body classes.
  *
  * @param array $classes Classes for the body element.

@@ -1,0 +1,53 @@
+
+/* Next & previous buttons */
+.slider-container .prev,
+.slider-container .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 3px;
+  user-select: none;
+	text-decoration: none;
+  background-color: rgba(0,0,0,0.5);
+}
+
+/* Position the "prev button" to the left */
+.slider-container .prev {
+  left: 0;
+}
+
+/* Position the "next button" to the right */
+.slider-container .next {
+  right: 0;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.slider-container .prev:hover,
+.slider-container .next:hover {
+  background-color: rgba(0,0,0,0.8);
+	text-decoration: none;
+}
+.pure-js-carousel {
+  overflow: hidden;
+}
+
+.pure-js-carousel-list:before,
+.pure-js-carousel-list:after {
+  content: "";
+  display: table;
+}
+
+.pure-js-carousel-list:after {
+  clear: both;
+}
+
+.pure-js-carousel-slide {
+  float: left;
+}

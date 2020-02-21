@@ -2,7 +2,7 @@
 /**
  * The template for displaying all single posts.
  *
- * @package Byte_Gazette
+ * @package bytegazette
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,18 +10,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$bytegazette_sidebar_layout      = bytegazette_get_sidebar_layout();
-$bytegazette_sidebar_width_class = bytegazette_get_sidebar_width_class();
-$bytegazette_main_width_class    = bytegazette_get_main_width_class();
-$bytegazette_show_prev_next      = get_theme_mod( 'next_prev_post', '1' ) ? true : false;
-$bytegazette_post_author_show    = get_theme_mod( 'post_related_show', ByteGazette::DEFAULT_POST_RELATED ) ? true : false;
-$bytegazette_post_related_show   = get_theme_mod( 'post_related_show', ByteGazette::DEFAULT_POST_RELATED ) ? true : false;
+$bytegazette_prev_next_show    = get_theme_mod( 'post_next_prev', ByteGazette::POST_NEXT_PREV ) ? true : false;
+$bytegazette_post_author_show  = get_theme_mod( 'post_author_box', ByteGazette::POST_AUTHOR_BOX ) ? true : false;
+$bytegazette_post_related_show = get_theme_mod( 'post_related', ByteGazette::POST_RELATED ) ? true : false;
 
 get_header();
 ?>
 
 	<div id="primary" class="content-area">
-		<main id="main" class="site-main uk-section-xsmall">
+		<main id="main" class="site-main">
 
 		<?php
 		/* Start the Loop */
@@ -37,8 +34,9 @@ get_header();
 
 		endwhile;
 
-		previous_post_link( '<div class="left-button">%link</div>', esc_html__( 'Previous Post', 'bytegazette' ) );
-		next_post_link( '<div class="right-button">%link</div>', esc_html__( 'Next Post', 'bytegazette' ) );
+		if ( $bytegazette_prev_next_show ) {
+			get_template_part( 'template-parts/sections/post', 'links' );
+		}
 
 		if ( $bytegazette_post_author_show ) {
 			get_template_part( 'template-parts/sections/post', 'author' );

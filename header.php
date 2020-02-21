@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+$bytegazette_sidebar_body_class = bytegazette_get_sidebar_body_class();
+
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -28,14 +30,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php wp_head(); ?>
 	</head>
 
-	<body <?php body_class(); ?>>
+	<body <?php body_class( array( $bytegazette_sidebar_body_class ) ); ?>>
 
 		<div id="page" class="site">
 			<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'bytegazette' ); ?></a>
 
 			<header id="masthead" class="site-header">
 
-				<div class="site-branding" role="banner">
+				<div id="site-branding" class="main-banner" role="banner">
 					<div class="container">
 						<?php get_template_part( 'template-parts/layout/header', 'banner' ); ?>
 					</div>

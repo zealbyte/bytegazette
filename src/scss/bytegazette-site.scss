@@ -46,6 +46,7 @@ $global-danger-background:        #f0506e !default;
 
 // Borders
 $global-border-width:             1px !default;
+$global-border-style:             solid !default;
 $global-border:                   #e5e5e5 !default;
 
 // Box-Shadows
@@ -57,9 +58,9 @@ $global-xlarge-box-shadow:        0 28px 50px rgba(0,0,0,0.16) !default;
 // Spacings
 $global-margin:                   20px !default;
 $global-small-margin:             10px !default;
-$global-medium-margin:            40px !default;
-$global-large-margin:             70px !default;
-$global-xlarge-margin:            140px !default;
+$global-medium-margin:            30px !default;
+$global-large-margin:             50px !default;
+$global-xlarge-margin:            70px !default;
 
 $global-gutter:                   30px !default;
 $global-small-gutter:             15px !default;
@@ -104,34 +105,24 @@ $global-z-index:                  999 !default;
 @import "components/base.scss";
 
 // Elements
-@import "components/text.scss";
-@import "components/link.scss";
 @import "components/heading.scss";
-@import "components/divider.scss";
 @import "components/list.scss";
-@import "components/description-list.scss";
 @import "components/table.scss";
-@import "components/icon.scss";
-@import "components/form-range.scss";
-@import "components/form.scss"; // After: Icon, Form Range
+@import "components/form.scss";
 @import "components/button.scss";
 
 // Layout
 @import "components/columns.scss";
 @import "components/section.scss";
-@import "components/container.scss";
 @import "components/card.scss";
 
 // Common
-@import "components/close.scss"; // After: Icon
-@import "components/spinner.scss"; // After: Icon
-@import "components/totop.scss"; // After: Icon
-@import "components/alert.scss"; // After: Close
 @import "components/badge.scss";
 @import "components/label.scss";
-@import "components/article.scss"; // After: Subnav
-@import "components/comment.scss"; // After: Subnav
-@import "components/search.scss"; // After: Icon
+@import "components/article.scss";
+@import "components/comment.scss";
+@import "components/search.scss";
+@import "components/widget.scss";
 
 // Navs
 @import "components/pagination.scss";

@@ -218,7 +218,10 @@ $search-toggle-hover-color:                          $global-color !default;
 /* Navbar modifier
  ========================================================================== */
 
-.uk-search-navbar { width: $search-navbar-width; }
+.uk-search-navbar {
+	width: 100%;
+	max-width: $search-navbar-width;
+}
 
 /*
  * Input
@@ -228,7 +231,6 @@ $search-toggle-hover-color:                          $global-color !default;
     height: $search-navbar-height;
     background: $search-navbar-background;
     font-size: $search-navbar-font-size;
-    @if(mixin-exists(hook-search-navbar-input)) {@include hook-search-navbar-input();}
 }
 
 /*

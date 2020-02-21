@@ -50,8 +50,6 @@ $card-badge-top:                                $global-gutter !default;
 $card-badge-right:                              $card-badge-top !default;
 
 $card-default-background:                       $global-background !default;
-$card-default-color:                            $global-color !default;
-$card-default-title-color:                      $global-emphasis-color !default;
 
 $card-small-body-padding-horizontal:            $global-margin !default;
 $card-small-body-padding-vertical:              $global-margin !default;
@@ -75,7 +73,8 @@ Component: Card
 .uk-card {
 	position: relative;
 	box-sizing: border-box;
-	border: $global-border-width solid $global-border;
+	border-width: $global-border-width;
+	border-style: solid;
 }
 
 
@@ -92,7 +91,8 @@ Component: Card
 
 .uk-card-footer {
 	padding: $card-footer-padding-vertical $card-footer-padding-horizontal;
-	border-top: $global-border-width solid $global-border;
+	border-top-width: $global-border-width;
+	border-top-style: solid;
 }
 
 /* Desktop and bigger */
@@ -132,6 +132,23 @@ Component: Card
 .uk-card-header > :last-child,
 .uk-card-footer > :last-child { margin-bottom: 0; }
 
+
+/* Media
+ ========================================================================== */
+
+.uk-card-media-top {
+	margin: 0;
+}
+
+.uk-card-media-left {
+	float: left;
+}
+
+.uk-card-media-right {
+	margin: 0;
+}
+
+
 /* Title
 ========================================================================== */
 
@@ -156,24 +173,6 @@ Component: Card
  */
 
 .uk-card-badge:first-child + * { margin-top: 0; }
-
-
-/* Style modifiers
-========================================================================== */
-
-/*
- * Default
- * Note: Header and Footer are only implemented for the default style
- */
-
-.uk-card-default {
-	background: $card-default-background;
-	color: $card-default-color;
-}
-
-.uk-card-default .uk-card-title {
-	color: $card-default-title-color;
-}
 
 
 /* Size modifier

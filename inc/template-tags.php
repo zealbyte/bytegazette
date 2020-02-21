@@ -2,9 +2,7 @@
 /**
  * Custom template tags for this theme
  *
- * Eventually, some of the functionality here could be replaced by core features.
- *
- * @package Byte_Gazette
+ * @package bytegazette
  */
 
 /*
@@ -31,6 +29,145 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Get an option setting value or default if the setting was not found.
+ *
+ * @param string $option_name The name of the option to get.
+ * @param mixed  $default_value The default value for the option setting.
+ * @global $bytegazette_options_settings;
+ * @return mixed The setting value or default.
+ */
+function bytegazette_get_option( $option_name, $default_value = null ) {
+	global $bytegazette_options_settings;
+
+	if ( empty( $bytegazette_options_settings ) ) {
+		$bytegazette_options_settings = get_option( ByteGazette::OPTIONS_SETTINGS, array() );
+	}
+
+	if ( isset( $bytegazette_options_settings[ $option_name ] ) ) {
+		return $bytegazette_options_settings[ $option_name ];
+	}
+
+	return $default_value;
+}
+
+/**
+ * Set on option setting value.
+ *
+ * @param string $option_name The name of the option to set.
+ * @param mixed  $value The setting value to set.
+ * @global $bytegazette_options_settings;
+ * @return bool Weather the setting was modified or not.
+ */
+function bytegazette_set_option( $option_name, $value ) {
+	global $bytegazette_options_settings;
+
+	$old_val = bytegazette_get_option( $option_name );
+
+	if ( $old_val !== $value ) {
+		$bytegazette_options_settings[ $option_name ] = $value;
+
+		set_option( ByteGazette::OPTIONS_SETTINGS, $byte_gazette_options_settings );
+
+		return true;
+	}
+
+	return false;
+}
+
+if ( ! function_exists( 'bytegazette_comment' ) ) :
+	/**
+	 * Build HTML output of a comment response.
+	 *
+	 * @param string $comment The comment object.
+	 * @param array  $args The arguments supplied by the comments template.
+	 * @param int    $depth The depth level of the comment.
+	 */
+	function bytegazette_comment( $comment, $args, $depth ) {
+		// This variable is intended to be written.
+		$GLOBALS['comment'] = $comment; // phpcs:ignore
+
+		?>
+		<li <?php comment_class( empty( $args['has_children'] ) ? '' : 'parent' ); ?> id="comment-<?php comment_ID(); ?>" itemscope itemtype="http://schema.org/Comment">
+
+			<figure class="gravatar"><?php echo get_avatar( $comment, $args['avatar_size'] ); ?></figure>
+
+			<article id="div-comment-<?php comment_ID(); ?>" class="comment-body">
+
+				<footer class="comment-footer">
+
+					<div class="comment-metadata">
+
+						<time class="comment-meta-item" datetime="<?php comment_date( 'Y-m-d' ); ?>T<?php comment_time( 'H:iP' ); ?>" itemprop="datePublished">
+
+							<a href="#comment-<?php comment_ID(); ?>" itemprop="url"><?php comment_date( get_option( 'date_format' ) ); ?></a>
+
+						</time>
+
+						<div class="reply-link">
+
+							<?php
+							comment_reply_link( array_merge( $args, array(
+								'depth'     => $depth,
+								'max_depth' => $args['max_depth'],
+							) ) );
+							?>
+
+						</div>
+
+						<?php edit_comment_link( __( 'Edit', 'bytegazette' ), '<div class="edit-link">', '</div>' ); ?>
+
+					</div><!-- .comment-metadata -->
+
+					<div class="comment-author vcard">
+
+						<b class="fn"><a class="comment-author-link" href="<?php comment_author_url(); ?>" rel="external nofollow" itemprop="author"><?php comment_author(); ?></a></b>
+
+					</div><!-- .comment-author -->
+
+				</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+
+					<?php if ( '0' === (string) $comment->comment_approved ) : ?>
+
+						<em><?php esc_html_e( 'Your comment is awaiting moderation.', 'bytegazette' ); ?></em>
+
+					<?php endif; ?>
+
+					<?php comment_text(); ?>
+
+				</div><!-- .comment-content -->
+
+			</article>
+
+		</li>
+		<?php
+	}
+endif;
+
+if ( ! function_exists( 'bytegazette_list_comments' ) ) :
+	/**
+	 * Generate list of comments for current post using the Byte Gazette params.
+	 *
+	 * @param array $attrs The attributes to override to wp_list_comments.
+	 */
+	function bytegazette_list_comments( $attrs = array() ) {
+		$tag = get_theme_mod( 'comment_list_tag', ByteGazette::COMMENT_LIST_TAG );
+
+		printf( '<%s class="comment-list">', esc_attr( $tag ) );
+
+		wp_list_comments( array_merge( array(
+			'style'        => $tag,
+			'short_ping'   => get_theme_mod( 'comment_short_ping', ByteGazette::COMMENT_SHORT_PING ),
+			'avatar_size'  => get_theme_mod( 'comment_avatar_size', ByteGazette::COMMENT_AVATAR_SIZE ),
+			'callback'     => 'bytegazette_comment',
+		), $attrs ) );
+
+		printf( '</%s>', esc_attr( $tag ) );
+	}
+endif;
+
 if ( ! function_exists( 'bytegazette_slideshow_posts' ) ) :
 	/**
 	 * Generate list of featured slideshow posts using tag.
@@ -40,8 +177,8 @@ if ( ! function_exists( 'bytegazette_slideshow_posts' ) ) :
 	 * @return WP_Query The featured posts to show.
 	 */
 	function bytegazette_slideshow_posts( $tag = null, $count = null ) {
-		$tag = (bool) $tag ? $tag : get_theme_mod( 'slideshow_posts_tag', ByteGazette::DEFAULT_SLIDESHOW_POSTS_TAG );
-		$num = (bool) $count ? $count : get_theme_mod( 'slideshow_posts_count', ByteGazette::DEFAULT_SLIDESHOW_POSTS_COUNT );
+		$tag = (bool) $tag ? $tag : get_theme_mod( 'slideshow_posts_tag', ByteGazette::SLIDESHOW_POSTS_TAG );
+		$num = (bool) $count ? $count : get_theme_mod( 'slideshow_posts_count', ByteGazette::SLIDESHOW_POSTS_COUNT );
 
 		return bytegazette_featured_posts( $tag, $num );
 	}
@@ -56,8 +193,8 @@ if ( ! function_exists( 'bytegazette_featured_posts' ) ) :
 	 * @return WP_Query The featured posts to show.
 	 */
 	function bytegazette_featured_posts( $tag = null, $count = null ) {
-		$tag = (bool) $tag ? $tag : get_theme_mod( 'featured_posts_tag', ByteGazette::DEFAULT_FEATURED_POSTS_TAG );
-		$num = (bool) $count ? $count : get_theme_mod( 'featured_posts_count', ByteGazette::DEFAULT_FEATURED_POSTS_COUNT );
+		$tag = (bool) $tag ? $tag : get_theme_mod( 'featured_posts_tag', ByteGazette::FEATURED_POSTS_TAG );
+		$num = (bool) $count ? $count : get_theme_mod( 'featured_posts_count', ByteGazette::FEATURED_POSTS_COUNT );
 
 		$args = array(
 			'tag'            => (string) $tag,
@@ -110,11 +247,11 @@ if ( ! function_exists( 'bytegazette_related_posts' ) ) :
 	 */
 	function bytegazette_related_posts() {
 		$post_id = get_the_ID();
-		$method  = get_theme_mod( 'post_related_method', ByteGazette::DEFAULT_POST_RELATED_METHOD );
-		$count   = (int) get_theme_mod( 'post_related_count', ByteGazette::DEFAULT_POST_RELATED_COUNT );
+		$method  = get_theme_mod( 'post_related_method', ByteGazette::POST_RELATED_METHOD );
+		$count   = (int) get_theme_mod( 'post_related_count', ByteGazette::POST_RELATED_COUNT );
 
-		if ( ByteGazette::DEFAULT_POST_RELATED_MAX < $bytegazette_post_related_count ) {
-			$bytegazette_post_related_count = ByteGazette::DEFAULT_POST_RELATED_MAX;
+		if ( ByteGazette::POST_RELATED_MAX < $bytegazette_post_related_count ) {
+			$bytegazette_post_related_count = ByteGazette::POST_RELATED_MAX;
 		}
 
 		$ids  = array();
@@ -169,7 +306,7 @@ if ( ! function_exists( 'bytegazette_posted_on' ) ) :
 			'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
 		);
 
-		echo '<span class="posted-on">' . $posted_on . '</span>'; // WPCS: XSS OK.
+		print( '<span class="posted-on">' . $posted_on . '</span>' ); // WPCS: XSS OK.
 
 	}
 endif;
@@ -185,7 +322,7 @@ if ( ! function_exists( 'bytegazette_posted_by' ) ) :
 			'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
 		);
 
-		echo '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
+		print( '<span class="byline"> ' . $byline . '</span>' ); // WPCS: XSS OK.
 
 	}
 endif;
@@ -199,160 +336,85 @@ if ( ! function_exists( 'bytegazette_images_loading' ) ) :
 	}
 endif;
 
-if ( ! function_exists( 'bytegazette_entry_footer' ) ) :
+if ( ! function_exists( 'bytegazette_time_ago' ) ) :
 	/**
-	 * Prints HTML with meta information for the categories, tags and comments.
-	 */
-	function bytegazette_entry_footer() {
-		// Hide category and tag text for pages.
-		if ( 'post' === get_post_type() ) {
-			/* translators: used between list items, there is a space after the comma */
-			//$categories_list = get_the_category_list( esc_html__( ', ', 'bytegazette' ) );
-			//if ( $categories_list ) {
-				/* translators: 1: list of categories. */
-				//printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'bytegazette' ) . '</span>', $categories_list ); // WPCS: XSS OK.
-			//}
-
-			/* translators: used between list items, there is a space after the comma */
-			$tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'bytegazette' ) );
-			if ( $tags_list ) {
-				/* translators: 1: list of tags. */
-				printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'bytegazette' ) . '</span>', $tags_list ); // WPCS: XSS OK.
-			}
-		}
-
-		if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
-			echo '<span class="comments-link">';
-			comments_popup_link(
-				sprintf(
-					wp_kses(
-						/* translators: %s: post title */
-						__( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', 'bytegazette' ),
-						array(
-							'span' => array(
-								'class' => array(),
-							),
-						)
-					),
-					get_the_title()
-				)
-			);
-			echo '</span>';
-		}
-
-		edit_post_link(
-			sprintf(
-				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'bytegazette' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				),
-				get_the_title()
-			),
-			'<span class="edit-link">',
-			'</span>'
-		);
-	}
-endif;
-
-if ( ! function_exists( 'bytegazette_post_thumbnail' ) ) :
-	/**
-	 * Displays an optional post thumbnail.
+	 * Time ago formatter function
 	 *
-	 * Wraps the post thumbnail in an anchor element on index views, or a div
-	 * element when on single views.
+	 * @param DateTime $date The date to be compared to current date.
 	 */
-	function bytegazette_post_thumbnail() {
-		if ( post_password_required() || is_attachment() || ! has_post_thumbnail() ) {
-			return;
+	function bytegazette_time_ago( DateTime $date ) {
+
+		// Array of time period chunks
+		$chunks = array(
+			array( 60 * 60 * 24 * 365, esc_html__( 'year', 'bytegazette' ), esc_html__( 'years', 'bytegazette' ) ),
+			array( 60 * 60 * 24 * 30, esc_html__( 'month', 'bytegazette' ), esc_html__( 'months', 'bytegazette' ) ),
+			array( 60 * 60 * 24 * 7, esc_html__( 'week', 'bytegazette' ), esc_html__( 'weeks', 'bytegazette' ) ),
+			array( 60 * 60 * 24, esc_html__( 'day', 'bytegazette' ), esc_html__( 'days', 'bytegazette' ) ),
+			array( 60 * 60, esc_html__( 'hour', 'bytegazette' ), esc_html__( 'hours', 'bytegazette' ) ),
+			array( 60, esc_html__( 'minute', 'bytegazette' ), esc_html__( 'minutes', 'bytegazette' ) ),
+			array( 1, esc_html__( 'second', 'bytegazette' ), esc_html__( 'seconds', 'bytegazette' ) ),
+		);
+
+		/*
+		if ( !is_numeric( $date ) ) {
+			$time_chunks = explode( ':', str_replace( ' ', ':', $date ) );
+			$date_chunks = explode( '-', str_replace( ' ', '-', $date ) );
+			$date = gmmktime( (int)$time_chunks[1], (int)$time_chunks[2], (int)$time_chunks[3], (int)$date_chunks[1], (int)$date_chunks[2], (int)$date_chunks[0] );
 		}
 
-		if ( is_singular() ) :
-			?>
+		$current_time = current_time( 'mysql', $gmt = 0 );
+		$newer_date = strtotime( $current_time );
 
-			<div class="post-thumbnail">
-				<?php the_post_thumbnail(); ?>
-			</div><!-- .post-thumbnail -->
+		// Difference in seconds
+		$since = $newer_date - $date;
 
-		<?php else : ?>
+		// Something went wrong with date calculation and we ended up with a negative date.
+		if ( 0 > $since )
+			return esc_html__( 'sometime', 'bytegazette' );
 
-		<a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
-			<?php
-			the_post_thumbnail( 'post-thumbnail', array(
-				'alt' => the_title_attribute( array(
-					'echo' => false,
-				) ),
-			) );
-			?>
-		</a>
+		//Step one: the first chunk
+		for ( $i = 0, $j = count($chunks); $i < $j; $i++) {
+			$seconds = $chunks[$i][0];
 
-		<?php
-		endif; // End is_singular().
+			// Finding the biggest chunk (if the chunk fits, break)
+			if ( ( $count = floor($since / $seconds) ) != 0 )
+				break;
+		}
+
+		// Set output var
+		$output = ( 1 == $count ) ? '1 '. $chunks[$i][1] : $count . ' ' . $chunks[$i][2];
+
+
+		if ( !(int)trim($output) ){
+			$output = '0 ' . esc_html__( 'seconds', BYTEGAZETTE_THEME_DOMAIN );
+		}
+
+		$output .= esc_html__( ' ago', BYTEGAZETTE_THEME_DOMAIN );
+		return $output;
+		 */
+
+		return $date->format( 'c' );
 	}
 endif;
 
-/**
- * Time ago formatter function
- *
- * @param DateTime $date The date to be compared to current date.
- */
-function bytegazette_time_ago( DateTime $date ) {
-
-	// Array of time period chunks
-	$chunks = array(
-		array( 60 * 60 * 24 * 365, esc_html__( 'year', 'bytegazette' ), esc_html__( 'years', 'bytegazette' ) ),
-		array( 60 * 60 * 24 * 30, esc_html__( 'month', 'bytegazette' ), esc_html__( 'months', 'bytegazette' ) ),
-		array( 60 * 60 * 24 * 7, esc_html__( 'week', 'bytegazette' ), esc_html__( 'weeks', 'bytegazette' ) ),
-		array( 60 * 60 * 24, esc_html__( 'day', 'bytegazette' ), esc_html__( 'days', 'bytegazette' ) ),
-		array( 60 * 60, esc_html__( 'hour', 'bytegazette' ), esc_html__( 'hours', 'bytegazette' ) ),
-		array( 60, esc_html__( 'minute', 'bytegazette' ), esc_html__( 'minutes', 'bytegazette' ) ),
-		array( 1, esc_html__( 'second', 'bytegazette' ), esc_html__( 'seconds', 'bytegazette' ) ),
-	);
-
-	/*
-	if ( !is_numeric( $date ) ) {
-		$time_chunks = explode( ':', str_replace( ' ', ':', $date ) );
-		$date_chunks = explode( '-', str_replace( ' ', '-', $date ) );
-		$date = gmmktime( (int)$time_chunks[1], (int)$time_chunks[2], (int)$time_chunks[3], (int)$date_chunks[1], (int)$date_chunks[2], (int)$date_chunks[0] );
-	}
-
-	$current_time = current_time( 'mysql', $gmt = 0 );
-	$newer_date = strtotime( $current_time );
-
-	// Difference in seconds
-	$since = $newer_date - $date;
-
-	// Something went wrong with date calculation and we ended up with a negative date.
-	if ( 0 > $since )
-		return esc_html__( 'sometime', 'bytegazette' );
-
-	//Step one: the first chunk
-	for ( $i = 0, $j = count($chunks); $i < $j; $i++) {
-		$seconds = $chunks[$i][0];
-
-		// Finding the biggest chunk (if the chunk fits, break)
-		if ( ( $count = floor($since / $seconds) ) != 0 )
-			break;
-	}
-
-	// Set output var
-	$output = ( 1 == $count ) ? '1 '. $chunks[$i][1] : $count . ' ' . $chunks[$i][2];
-
-
-	if ( !(int)trim($output) ){
-		$output = '0 ' . esc_html__( 'seconds', BYTEGAZETTE_THEME_DOMAIN );
-	}
-
-	$output .= esc_html__( ' ago', BYTEGAZETTE_THEME_DOMAIN );
-	return $output;
+if ( ! function_exists( 'bytegazette_the_comments_pagination' ) ) :
+	/**
+	 * Show pagination links for comments.
 	 */
+	function bytegazette_the_comments_pagination() {
+		$bytegazette_pagination_comments_prev = bytegazette_get_option( 'pagination_comments_previous', BYTEGAZETTE_STRING_COMMENTS_PREVIOUS );
+		$bytegazette_pagination_comments_next = bytegazette_get_option( 'pagination_comments_next', BYTEGAZETTE_STRING_COMMENTS_NEXT );
 
-	return $date->format('c');
-}
+		?>
+			<nav class="nav-comment-pagination">
+				<ul class="pagination">
+					<li class="pager-previous"><?php previous_comments_link( '<span class="icon-svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M11.56 5.56L10.5 4.5 6 9l4.5 4.5 1.06-1.06L8.12 9z"/></svg></span><span class="text-wrap">' . $bytegazette_pagination_comments_prev . '</span>' ); ?></li>
+					<li class="pager-next"><?php next_comments_link( '<span class="text-wrap">' . $bytegazette_pagination_comments_next . '</span><span class="icon-svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M7.5 4.5L6.44 5.56 9.88 9l-3.44 3.44L7.5 13.5 12 9z"/></svg></span>' ); ?></li>
+				</ul>
+			</nav>
+		<?php
+	}
+endif;
 
 if ( ! function_exists( 'bytegazette_the_posts_pagination' ) ) :
 	/**
@@ -364,8 +426,8 @@ if ( ! function_exists( 'bytegazette_the_posts_pagination' ) ) :
 			'end_size'           => 1,
 			'mid_size'           => 2,
 			'prev_next'          => true,
-			'prev_text'          => '<span uk-pagination-previous></span>',
-			'next_text'          => '<span uk-pagination-next></span>',
+			'prev_text'          => '<span class="icon-svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M11.56 5.56L10.5 4.5 6 9l4.5 4.5 1.06-1.06L8.12 9z"/></svg></span><span class="text-wrap">Previous</span>',
+			'next_text'          => '<span class="text-wrap">Next</span><span class="icon-svg-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M7.5 4.5L6.44 5.56 9.88 9l-3.44 3.44L7.5 13.5 12 9z"/></svg></span>',
 			'type'               => 'array',
 			'add_fragment'       => '',
 			'before_page_number' => '',
@@ -375,13 +437,19 @@ if ( ! function_exists( 'bytegazette_the_posts_pagination' ) ) :
 		$pages = paginate_links( $args );
 
 		if ( is_array( $pages ) ) {
-			echo '<div class="nav-pagination uk-margin-top"><hr><ul class="uk-pagination uk-flex-center">';
+			$pager_count = count( $pages );
 
-			foreach ( $pages as $page ) {
-				printf( '<li>%s</li>', $page );
+			print( '<section class="nav-pagination"><hr><ul class="pagination">' );
+
+			for ( $p = 0; $p < $pager_count; $p++ ) {
+				$prev  = ( 0 === $p && strpos( $pages[ $p ], 'prev' ) ) ? 'pager-previous' : null;
+				$next  = ( ( $pager_count - 1 ) === $p && strpos( $pages[ $p ], 'next' ) ) ? 'pager-next' : null;
+				$class = ( $prev || $next ) ? sprintf( '%s%s', $prev, $next ) : 'pager';
+
+				printf( '<li class="%s">%s</li>', esc_attr( $class ), $pages[ $p ] ); // WPCS: XSS OK.
 			}
 
-			echo '</ul></div>';
+			print( '</ul></section>' );
 		}
 	}
 endif;
@@ -401,7 +469,7 @@ function bytegazette_the_thumbnail_url( $post_id, $size = 'featured-image' ) {
 		$image = get_template_directory_uri() . "/assets/img/nothumb-$size.jpg";
 	}
 
-	echo esc_url( $image );
+	print( esc_url( $image ) );
 }
 
 /**
@@ -411,12 +479,12 @@ function bytegazette_the_thumbnail_url( $post_id, $size = 'featured-image' ) {
  */
 function bytegazette_the_featured_video( $post_id ) {
 	static $video_strings = array(
-		'video',
-		'youtube',
-		'vimeo',
 		'dailymotion',
-		'wordPress.tv',
 		'hulu',
+		'video',
+		'vimeo',
+		'wordPress.tv',
+		'youtube',
 	);
 
 	bytegazette_get_first_embed_media( $post_id, $video_strings );
@@ -446,32 +514,22 @@ function bytegazette_the_featured_audio( $post_id ) {
  * @param array  $embed_strings An array of strings to search the embeds for.
  */
 function bytegazette_get_first_embed_media( $post_id, array $embed_strings ) {
+	$found   = false;
 	$content = do_shortcode( apply_filters( 'the_content', get_post_field( 'post_content', $post_id ) ) );
 	$embeds  = get_media_embedded_in_content( $content );
 
 	if ( ! empty( $embeds ) ) {
 		foreach ( $embeds as $embed ) {
-			foreach ( $embed_strings as $embed_string ) {
-				if ( strpos( $embed, $embed_string ) ) {
-					echo $embed;
+			if ( ! $found ) {
+				foreach ( $embed_strings as $embed_string ) {
+					if ( strpos( $embed, $embed_string ) ) {
+						$found = true;
+						print( $embed );
+						break;
+					}
 				}
 			}
 		}
-	}
-}
-
-// Display post format icon
-if ( !function_exists( 'bytegazette_post_format_icon' ) ) {
-	function bytegazette_post_format_icon( $format = 'format' ) {
-		if ( 'audio' === $format ) {
-			$icon = '<span uk-icon="microphone"></span>';
-		} elseif ( 'video' === $format ) {
-			$icon = '<span uk-icon="video-camera"></span>';
-		} else {
-			$icon = '<span uk-icon="code"></span>';
-		}
-
-		echo $icon;
 	}
 }
 
@@ -500,11 +558,11 @@ if ( ! function_exists( 'bytegazette_entry_category' ) ) {
 if ( ! function_exists( 'bytegazette_entry_tags' ) ) {
 	function bytegazette_entry_tags() {
 
-		if ( 'post' == get_post_type() ) {
+		if ( 'post' === get_post_type() ) {
 			/* translators: used between list items, there is a space after the comma */
 			$tags_list = get_the_tag_list( '', esc_html__( ', ', 'bytegazette' ) );
 			if ( $tags_list ) {
-				printf( '<span class="thetags"><i class="material-icons">label</i>'. esc_html__( '%1$s', 'bytegazette' ) .'</span>', $tags_list );
+				printf( '<span class="thetags"><i class="material-icons">label</i>' . esc_html__( '%1$s', 'bytegazette' ) . '</span>', $tags_list );
 			}
 		}
 	}
@@ -560,65 +618,21 @@ if ( ! function_exists( 'bytegazette_get_sidebar_layout' ) ) :
 	 * Get the sidebar class as per configured sidebar location.
 	 */
 	function bytegazette_get_sidebar_layout() {
-		$sidebar_layout = get_theme_mod( 'sidebar_layout', ByteGazette::DEFAULT_SIDEBAR_LAYOUT );
+		$sidebar_layout = get_theme_mod( 'sidebar_layout', ByteGazette::SIDEBAR_LAYOUT );
 
 		if ( is_home() ) {
-			$sidebar_layout = get_theme_mod( 'sidebar_layout_home', $sidebar_layout );
+			$sidebar_layout = get_theme_mod( 'front_sidebar', $sidebar_layout );
 		} elseif ( is_singular() ) {
-			$sidebar_layout = get_theme_mod( 'sidebar_layout_singular', $sidebar_layout );
+			$sidebar_layout = get_theme_mod( 'sidebar_layout', $sidebar_layout );
 		} elseif ( is_archive() ) {
-			$sidebar_layout = get_theme_mod( 'sidebar_layout_archive', $sidebar_layout );
+			$sidebar_layout = get_theme_mod( 'sidebar_layout', $sidebar_layout );
 		}
 
 		if ( in_array( $sidebar_layout, array( 'left', 'right', 'none' ), true ) ) {
 			return $sidebar_layout;
 		}
 
-		return ByteGazette::DEFAULT_SIDEBAR_LAYOUT;
-	}
-endif;
-
-if ( ! function_exists( 'bytegazette_get_main_width_class' ) ) :
-	/**
-	 * Get the master width form configured sidebar width.
-	 */
-	function bytegazette_get_main_width_class() {
-		$sidebar_width = bytegazette_get_sidebar_width();
-
-		switch ( $sidebar_width ) {
-			case '1_2':
-				return 'uk-width-1-2@m';
-			case '1_3':
-				return 'uk-width-2-3@m';
-			case '1_4':
-				return 'uk-width-3-4@m';
-			case '1_6':
-				return 'uk-width-5-6@m';
-		}
-
-		return '';
-	}
-endif;
-
-if ( ! function_exists( 'bytegazette_get_sidebar_width_class' ) ) :
-	/**
-	 * Get the sidebar width form configured sidebar width.
-	 */
-	function bytegazette_get_sidebar_width_class() {
-		$sidebar_width = bytegazette_get_sidebar_width();
-
-		switch ( $sidebar_width ) {
-			case '1_2':
-				return 'uk-width-1-2@m';
-			case '1_3':
-				return 'uk-width-1-3@m';
-			case '1_4':
-				return 'uk-width-1-4@m';
-			case '1_6':
-				return 'uk-width-1-6@m';
-		}
-
-		return '';
+		return ByteGazette::SIDEBAR_LAYOUT;
 	}
 endif;
 
@@ -627,34 +641,59 @@ if ( ! function_exists( 'bytegazette_get_sidebar_width' ) ) :
 	 * Get the sidebar width as configured.
 	 */
 	function bytegazette_get_sidebar_width() {
-		$sidebar_width = get_theme_mod( 'sidebar_layout', ByteGazette::DEFAULT_SIDEBAR_WIDTH );
+		$sidebar_width = get_theme_mod( 'sidebar_layout', ByteGazette::SIDEBAR_WIDTH );
 
 		if ( in_array( $sidebar_width, array( '1_2', '1_3', '1_4', '1_6' ), true ) ) {
 			return $sidebar_width;
 		}
 
-		return ByteGazette::DEFAULT_SIDEBAR_WIDTH;
+		return ByteGazette::SIDEBAR_WIDTH;
 	}
 endif;
 
-if ( ! function_exists( 'bytegazette_entry_author' ) ) {
+if ( ! function_exists( 'bytegazette_get_sidebar_width_class' ) ) :
+	/**
+	 * Get the sidebar width form configured sidebar width.
+	 */
+	function bytegazette_get_sidebar_body_class() {
+		$sidebar_layout = bytegazette_get_sidebar_layout();
+
+		if ( 'none' !== $sidebar_layout ) {
+			$sidebar_width = bytegazette_get_sidebar_width();
+
+			switch ( $sidebar_width ) {
+				case '1_2':
+					return "sidebar-$sidebar_layout sidebar-1-2";
+				case '1_3':
+					return "sidebar-$sidebar_layout sidebar-1-3";
+				case '1_4':
+					return "sidebar-$sidebar_layout sidebar-1-4";
+				case '1_6':
+					return "sidebar-$sidebar_layout sidebar-1-6";
+			}
+		}
+
+		return "sidebar-$sidebar_layout";
+	}
+endif;
+
+if ( ! function_exists( 'bytegazette_entry_author' ) ) :
 	/**
 	 * Display HTML with meta information for Author.
 	 */
 	function bytegazette_entry_author() {
 
 		if ( 'post' === get_post_type() ) {
-
 			printf(
-				// translator: post author.
+				// translator: 1: post author.
 				_x( '%s', 'post author', 'bytegazette' ),
 				'<span class="author vcard"><span class="url fn"><a href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span></span>'
 			);
 		}
 	}
-}
+endif;
 
-if ( ! function_exists( 'bytegazette_entry_comments' ) ) {
+if ( ! function_exists( 'bytegazette_entry_comments' ) ) :
 	/**
 	 * Display HTML with meta information for Comments number.
 	 */
@@ -663,79 +702,35 @@ if ( ! function_exists( 'bytegazette_entry_comments' ) ) {
 			printf( '<span>%s</span>', esc_attr( get_comments_number() ) );
 		}
 	}
-}
+endif;
 
-// Truncate string to x letters/words
-if ( ! function_exists( 'bytegazette_truncate_string' ) ) {
+if ( ! function_exists( 'bytegazette_truncate_string' ) ) :
+	/**
+	 * Truncate string to x letters/words.
+	 *
+	 * @param string $str The string to truncate.
+	 * @param int    $length The max length of string to truncate.
+	 * @param string $units letters|words Weather to truncate to max letters or max words.
+	 * @param string $ellipsis The ellipsis character to append fot truncated string.
+	 */
 	function bytegazette_truncate_string( $str, $length = 40, $units = 'letters', $ellipsis = '&nbsp;&hellip;' ) {
 
-		if ( $units == 'letters' ) {
+		if ( 'letters' === $units ) {
 
 			if ( mb_strlen( $str ) > $length ) {
 				return mb_substr( $str, 0, $length ) . $ellipsis;
 			} else {
 				return $str;
 			}
-
 		} else {
-
 			$words = explode( ' ', $str );
 
 			if ( count( $words ) > $length ) {
-				return implode( " ", array_slice( $words, 0, $length ) ) . $ellipsis;
+				return implode( ' ', array_slice( $words, 0, $length ) ) . $ellipsis;
 			} else {
 				return $str;
 			}
 		}
 	}
-}
-
-// Display breadcrumb
-if ( !function_exists( 'bytegazette_breadcrumb' ) ) {
-	function bytegazette_breadcrumb() {
-
-		// Separator, change this if you want to change breadcrumb items separator
-		$sep = esc_html__( '/', 'bytegazette' ); ?>
-
-		<div class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#">
-
-			<div typeof="v:Breadcrumb" class="root">
-				<a rel="v:url" property="v:title" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-					<?php esc_html_e( 'Home', 'bytegazette' ); ?>
-				</a>
-			</div>
-
-			<div><?php echo $sep; ?></div>
-
-			<?php if ( is_category() || is_single() ) { ?>
-
-			<?php $categories = get_the_category();
-		if ( $categories ) { ?>
-
-					<div typeof="v:Breadcrumb">
-						<a href="<?php echo get_category_link( $categories[0]->term_id ); ?>" rel="v:url" property="v:title">
-							<?php echo $categories[0]->cat_name; ?>
-						</a>
-					</div>
-					<div><?php echo $sep; ?></div>
-
-				<?php } ?>
-
-				<?php if ( is_single() ) { ?>
-					<div typeof='v:Breadcrumb'>
-						<span property='v:title'><?php the_title(); ?></span>
-					</div>
-				<?php } ?>
-
-			<?php } else if ( is_page() ) { ?>
-
-				<div typeof='v:Breadcrumb'><span property='v:title'>
-					<?php the_title(); ?>
-				</span></div>
-
-			<?php } ?>
-
-		</div>
-		<?php }
-}
+endif;
 

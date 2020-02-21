@@ -1,8 +1,11 @@
 /*--------------------------------------------------------------
-# Component: Article
+# Component: Widget
 --------------------------------------------------------------*/
 
-article .post-info,
-article .post-info a {
-	font-size: $global-small-font-size;
+.widget a {
+	text-decoration: none;
+}
+
+.widget select {
+	max-width: 100%;
 }

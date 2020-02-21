@@ -2,3 +2,29 @@
 footer .footer-text {
 	color: rgba(255, 255, 255, 0.7);
 }
+
+.feed-cards {
+	background: transparent url('../images/admin/feed-cards.png') no-repeat center center;
+}
+
+.feed-list {
+	background: transparent url('../images/admin/feed-list.png') no-repeat center center;
+}
+
+.sidebar-none {
+	background: transparent url('../images/admin/sidebar-none.png') no-repeat center center;
+}
+
+.sidebar-left {
+	background: transparent url('../images/admin/sidebar-left.png') no-repeat center center;
+}
+
+.sidebar-right {
+	background: transparent url('../images/admin/sidebar-right.png') no-repeat center center;
+}
+
+.image-select:checked + .ui-button .ui-button-text {
+	display: inline-block;
+	border: 2px solid #88f;
+	line-height: 0;
+}

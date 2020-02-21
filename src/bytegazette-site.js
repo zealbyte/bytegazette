@@ -1,6 +1,10 @@
 /* Styles */
 import './scss/bytegazette-site.scss';
 import './sections/slideshow.js';
+import './sections/slider/slider.js';
+import Masonry from 'masonry-layout/masonry.js';
+import lozad from 'lozad';
+import imagesLoaded from 'imagesloaded';
 
 var contentContainer = document.getElementById("content");
 
@@ -8,12 +12,12 @@ var contentContainer = document.getElementById("content");
 var stickies = document.getElementsByClassName("sticktotop");
 
 // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
-function myFunction() {
+window.onscroll = function() {
+	const offsetMargin = window.getComputedStyle(document.getElementsByTagName("html")[0]).marginTop;
 	var i;
 
 	for ( i=0; i < stickies.length; i++ ) {
 		var offset = stickies[i].offsetTop;
-		var offsetMargin = window.getComputedStyle(document.getElementsByTagName("html")[0]).marginTop;
 		var contentPadding = stickies[i].offsetHeight;
 
 		if (window.pageYOffset > offset) {
@@ -27,9 +31,35 @@ function myFunction() {
 			contentContainer.removeAttribute("style");
 		}
 	}
-}
-
-// When the user scrolls the page, execute myFunction
-window.onscroll = function() {
-	myFunction()
 };
+
+document.addEventListener("DOMContentLoaded", function() {
+	const lazyImages = document.querySelectorAll('.lazy');
+	const gridElement = document.querySelector('.grid');
+	var gridMasonry;
+
+	// Stat masonry on grid if it exists
+	if ( gridElement ) {
+		gridMasonry = new Masonry( gridElement, {
+			itemSelector: '.grid-item',
+			columnWidth: '.empty-item'
+		});
+	}
+
+	// Lazy load images and update masonry
+	const observer = lozad(lazyImages, {
+		loaded: function( el ) {
+			el.classList.add( 'loaded' );
+
+			if ( gridMasonry ) {
+				imagesLoaded( gridElement, function() {
+					gridMasonry.layout();
+				});
+				gridMasonry.layout();
+			}
+		}
+	});
+
+	observer.observe();
+});
+

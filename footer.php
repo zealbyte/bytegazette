@@ -20,11 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<div class="site-info">
 					<div class="container">
-						<?php get_template_part( 'template-parts/layout/footer', 'widget-area' ); ?>
+						<?php get_template_part( 'template-parts/layout/footer', 'info' ); ?>
 					</div>
 				</div>
 
-				<?php if ( is_active_sidebar( 'footer-columns' ) && ! ( 'no_sidebar' === get_theme_mod( 'bytegazette_sidebar_layout', ByteGazette::DEFAULT_SIDEBAR_LAYOUT ) ) ) : ?>
+				<?php if ( is_active_sidebar( 'footer-columns' ) ) : ?>
 					<div class="site-info-widgets">
 						<div class="container">
 							<?php dynamic_sidebar( 'footer-columns' ); ?>
@@ -33,8 +33,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php endif; ?>
 
 				<div id="footer-navigation" class="site-footer">
-					<div class="container uk-section">
-						<?php get_template_part( 'template-parts/layout/footer', 'lower-navigation' ); ?>
+					<div class="section section-xlarge container">
+						<?php get_template_part( 'template-parts/layout/footer', 'navigation' ); ?>
 					</div>
 				</div><!-- #colophon -->
 
@@ -42,5 +42,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div><!-- #page -->
 
 		<?php wp_footer(); ?>
+
 	</body>
 </html>

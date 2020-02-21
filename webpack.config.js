@@ -16,12 +16,6 @@ const paths = {
 	lang: 'languages/',
 };
 
-const uikitConfig = {
-	entry: {
-		'bytegazette-uikit': './src/bytegazette-uikit.js',
-	},
-}
-
 const themeConfig = {
 	entry: {
 		'bytegazette-site': './src/bytegazette-site.js',
@@ -47,7 +41,6 @@ const themeConfig = {
 		'react': 'React',
 		'react-dom': 'ReactDOM',
 		'tinymce': 'tinymce',
-		'uikit': 'UIkit',
 	},
 };
 
@@ -182,8 +175,5 @@ module.exports = ( env ) => {
 	console.log( 'development: ', env.development ? 'yes' : 'no' );
 	console.log( 'production: ', env.production ? 'yes' : 'no' );
 
-	return [
-		Object.assign( {}, webpackConfig( env, srcPath, buildPath ), uikitConfig ),
-		Object.assign( {}, webpackConfig( env, srcPath, buildPath ), themeConfig ),
-	];
+	return [Object.assign( {}, webpackConfig( env, srcPath, buildPath ), themeConfig )];
 };

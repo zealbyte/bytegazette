@@ -267,6 +267,46 @@ class ByteGazette_Customizer_Controls {
 	}
 
 	/**
+	 * Add cropped image control to a customizer section.
+	 *
+	 * @param string $control_name The unique name of the control to add.
+	 * @param string $section_name The name of the section to add the control to.
+	 * @param array  $attributes The specific attributes for this control.
+	 * @param int    $priority The control priority in the section.
+	 */
+	public static function add_cropped_image( $control_name, $section_name, $attributes = array(), $priority = self::DEFAULT_CONTROL_PRIORITY ) {
+		global $wp_customize;
+
+		$label       = (string) isset( $attributes['label'] ) ? $attributes['label'] : '';
+		$default     = (string) isset( $attributes['default'] ) ? $attributes['default'] : '';
+		$description = (string) isset( $attributes['description'] ) ? $attributes['description'] : '';
+		$width       = (int) isset( $attributes['width'] ) ? $attributes['width'] : 0;
+		$height      = (int) isset( $attributes['height'] ) ? $attributes['height'] : 0;
+		$flex_width  = (bool) isset( $attributes['flex_width'] ) ? $attributes['flex_width'] : false;
+		$flex_height = (bool) isset( $attributes['flex_height'] ) ? $attributes['flex_height'] : false;
+
+		$wp_customize->add_setting( $control_name, array(
+			'default'           => $default,
+			'sanitize_callback' => 'absint',
+		) );
+
+		$wp_customize->add_control( new WP_Customize_Cropped_Image_Control(
+			$wp_customize,
+			$control_name,
+			array(
+				'width'       => $width,
+				'height'      => $height,
+				'flex_width'  => $flex_width,
+				'flex_height' => $flex_height,
+				'label'       => $label,
+				'description' => $description,
+				'section'     => $section_name,
+				'priority'    => $priority,
+			)
+		) );
+	}
+
+	/**
 	 * Add uploader control to a customizer section.
 	 *
 	 * @param string $control_name The unique name of the control to add.
@@ -452,83 +492,11 @@ class ByteGazette_Customizer_Controls {
 
 		$wp_customize->add_control( $control_name, array(
 			'type'        => 'select',
-			'label'       => $control_label,
+			'label'       => $label,
 			'description' => $description,
 			'section'     => $section_name,
 			'priority'    => $priority,
 			'choices'     => $choices,
-		) );
-	}
-
-	/**
-	 * Add general text field control to a customizer section.
-	 *
-	 * @param string $control_name The unique name of the control to add.
-	 * @param string $control_label The label shown for the control.
-	 * @param string $section_name The name of the section to add the control to.
-	 * @param array  $defaults The default values for the individual controls.
-	 * @param string $description The helpful description of the control.
-	 * @param int    $priority The control priority in the section.
-	 */
-	public static function add_background( $control_name, $control_label, $section_name, $defaults = array(), $description = '', $priority = self::DEFAULT_CONTROL_PRIORITY ) {
-		global $wp_customize;
-
-		$defaults['repeat']   = ( array_key_exists( 'repeat', $defaults ) ) ? $defaults['repeat'] : 'repeat';
-		$defaults['size']     = ( array_key_exists( 'size', $defaults ) ) ? $defaults['size'] : 'auto';
-		$defaults['position'] = ( array_key_exists( 'position', $defaults ) ) ? $defaults['position'] : 'left-top';
-		$defaults['attach']   = ( array_key_exists( 'attach', $defaults ) ) ? $defaults['attach'] : 'scroll';
-
-		$wp_customize->add_setting( $control_name . '_image_url', array(
-			'sanitize_callback' => 'esc_url',
-			'type'              => 'theme_mod',
-		) );
-
-		$wp_customize->add_setting( $control_name . '_image_id', array(
-			'sanitize_callback' => 'absint',
-			'type'              => 'theme_mod',
-		) );
-
-		$wp_customize->add_setting( $control_name . '_repeat', array(
-			'default'           => $defaults['repeat'],
-			'sanitize_callback' => 'sanitize_text_field',
-			'type'              => 'theme_mod',
-		) );
-
-		$wp_customize->add_setting( $control_name . '_size', array(
-			'default'           => $defaults['size'],
-			'sanitize_callback' => 'sanitize_text_field',
-			'type'              => 'theme_mod',
-		) );
-
-		$wp_customize->add_setting( $control_name . '_attach', array(
-			'default'           => $defaults['attach'],
-			'sanitize_callback' => 'sanitize_text_field',
-			'type'              => 'theme_mod',
-		) );
-
-		$wp_customize->add_setting( $control_name . '_position', array(
-			'default'           => $defaults['position'],
-			'sanitize_callback' => 'sanitize_text_field',
-			'type'              => 'theme_mod',
-		) );
-
-		$wp_customize->add_control( new ByteGazette_Customizer_BackgroundControl(
-			$wp_customize,
-			$control_name,
-			array(
-				'label'       => $control_label,
-				'description' => $description,
-				'section'     => $section_name,
-				'priority'    => $priority,
-				'settings'    => array(
-					'image_url' => $control_name . '_image_url',
-					'image_id'  => $control_name . '_image_id',
-					'repeat'    => $control_name . '_repeat',
-					'size'      => $control_name . '_size',
-					'position'  => $control_name . '_position',
-					'attach'    => $control_name . '_attach',
-				),
-			)
 		) );
 	}
 }

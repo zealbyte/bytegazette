@@ -43,14 +43,14 @@ class ByteGazette_Admin_Customizer {
 
 		add_action( 'customize_register', array( __CLASS__, 'customize_register' ) );
 		add_action( 'customize_preview_init', array( __CLASS__, 'customize_preview_js' ) );
-
-			add_action( 'bytegazette_customizer_section_site', array( __CLASS__, 'customizer_section_site' ) );
-			add_action( 'bytegazette_customizer_section_homepage', array( __CLASS__, 'customizer_section_homepage' ) );
-			add_action( 'bytegazette_customizer_section_header', array( __CLASS__, 'customizer_section_header' ) );
-			add_action( 'bytegazette_customizer_section_footer', array( __CLASS__, 'customizer_section_footer' ), 10 );
-			add_action( 'bytegazette_customizer_section_posts', array( __CLASS__, 'customizer_section_posts' ) );
-			add_action( 'bytegazette_customizer_section_archives', array( __CLASS__, 'customizer_section_archives' ) );
-			add_action( 'bytegazette_customizer_section_background', array( __CLASS__, 'customizer_section_background' ) );
+		add_action( 'bytegazette_customizer_section_colors', array( __CLASS__, 'customizer_section_colors' ) );
+		add_action( 'bytegazette_customizer_section_front_page', array( __CLASS__, 'customizer_section_front' ) );
+		add_action( 'bytegazette_customizer_section_site', array( __CLASS__, 'customizer_section_site' ) );
+		add_action( 'bytegazette_customizer_section_navigation', array( __CLASS__, 'customizer_section_navigation' ) );
+		add_action( 'bytegazette_customizer_section_footer', array( __CLASS__, 'customizer_section_footer' ), 10 );
+		add_action( 'bytegazette_customizer_section_posts', array( __CLASS__, 'customizer_section_posts' ) );
+		add_action( 'bytegazette_customizer_section_comments', array( __CLASS__, 'customizer_section_comments' ) );
+		add_action( 'bytegazette_customizer_section_archives', array( __CLASS__, 'customizer_section_archives' ) );
 	}
 
 	/**
@@ -69,16 +69,20 @@ class ByteGazette_Admin_Customizer {
 		$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 		$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
 
+		if ( isset( $show_sections['colors'] ) && $show_sections['colors'] ) {
+			do_action( 'bytegazette_customizer_section_colors' );
+		}
+
+		if ( isset( $show_sections['front'] ) && $show_sections['front'] ) {
+			do_action( 'bytegazette_customizer_section_front_page' );
+		}
+
 		if ( isset( $show_sections['site'] ) && $show_sections['site'] ) {
 			do_action( 'bytegazette_customizer_section_site' );
 		}
 
-		if ( isset( $show_sections['homepage'] ) && $show_sections['homepage'] ) {
-			do_action( 'bytegazette_customizer_section_homepage' );
-		}
-
-		if ( isset( $show_sections['header'] ) && $show_sections['header'] ) {
-			do_action( 'bytegazette_customizer_section_header' );
+		if ( isset( $show_sections['navigation'] ) && $show_sections['navigation'] ) {
+			do_action( 'bytegazette_customizer_section_navigation' );
 		}
 
 		if ( isset( $show_sections['footer'] ) && $show_sections['footer'] ) {
@@ -89,12 +93,12 @@ class ByteGazette_Admin_Customizer {
 			do_action( 'bytegazette_customizer_section_posts' );
 		}
 
-		if ( isset( $show_sections['archives'] ) && $show_sections['archives'] ) {
-			do_action( 'bytegazette_customizer_section_archives' );
+		if ( isset( $show_sections['comments'] ) && $show_sections['comments'] ) {
+			do_action( 'bytegazette_customizer_section_comments' );
 		}
 
-		if ( isset( $show_sections['background'] ) && $show_sections['background'] ) {
-			do_action( 'bytegazette_customizer_section_background' );
+		if ( isset( $show_sections['archives'] ) && $show_sections['archives'] ) {
+			do_action( 'bytegazette_customizer_section_archives' );
 		}
 
 		if ( isset( $wp_customize->selective_refresh ) ) {
@@ -137,88 +141,262 @@ class ByteGazette_Admin_Customizer {
 	}
 
 	/**
+	 * Append the colors setcion of the theme customizer to customize custom colors.
+	 *
+	 * @return void
+	 */
+	public static function customizer_section_colors() {
+		ByteGazette_Customizer_Controls::add_color( 'heading_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Heading Text', 'bytegazette' ),
+			'default' => ByteGazette::HEADING_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'emphasis_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Emphasis Text', 'bytegazette' ),
+			'default' => ByteGazette::EMPHASIS_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'mute_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Muted Text', 'bytegazette' ),
+			'default' => ByteGazette::MUTE_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'border_color', 'colors', array(
+			'label'   => esc_html__( 'Borders', 'bytegazette' ),
+			'default' => ByteGazette::BORDER_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'even_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Even Row Background', 'bytegazette' ),
+			'default' => ByteGazette::EVEN_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'odd_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Odd Row Background', 'bytegazette' ),
+			'default' => ByteGazette::ODD_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Header Background', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_link_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Header Links', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_LINK_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_title_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Header Title', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_TITLE_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_nav_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Navigation Text', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_NAV_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_nav_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Navigation Background', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_NAV_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_nav_link_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Navigation Links', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_NAV_LINK_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_nav_item_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Navigation Item Background', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_NAV_ITEM_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_nav_item_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Navigation Item Text', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_NAV_ITEM_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_nav_item_current_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Navigation Current Item Background', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_NAV_ITEM_CURRENT_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_nav_item_current_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Navigation Current Item Text', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_NAV_ITEM_CURRENT_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_subnav_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Dropdown Background', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_SUBNAV_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_subnav_item_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Dropdown Item Background', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_SUBNAV_ITEM_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_subnav_item_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Dropdown Item Text', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_SUBNAV_ITEM_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_subnav_item_current_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Dropdown Item Current Background', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_SUBNAV_ITEM_CURRENT_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'header_subnav_item_current_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Dropdown Item Current Text', 'bytegazette' ),
+			'default' => ByteGazette::HEADER_SUBNAV_ITEM_CURRENT_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Footer Text', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Footer Background', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_link_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Footer Links', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_LINK_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_heading_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Footer Heading Text', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_HEADING_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_nav_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Footer Navigation Text', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_NAV_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_nav_bg_color', 'colors', array(
+			'label'   => esc_html__( 'Footer Navigation Background', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_NAV_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_nav_link_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Footer Navigation Link', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_NAV_LINK_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_nav_heading_fg_color', 'colors', array(
+			'label'   => esc_html__( 'Footer Navigation Title Text', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_NAV_HEADING_FG_COLOR,
+		) );
+	}
+
+	/**
 	 * Add a setcion to the theme customizer to customize general site options.
 	 *
 	 * @return void
 	 */
 	public static function customizer_section_site() {
 		ByteGazette_Customizer_Controls::add_section( 'bytegazette_site', array(
-			'title' => esc_html__( 'Site Options', 'bytegazette' ),
+			'title' => esc_html__( 'Theme Settings', 'bytegazette' ),
 		), 20 );
+
+		// Site sidebar layout options.
+		ByteGazette_Customizer_Controls::add_image_radio( 'sidebar_layout', 'bytegazette_site', array(
+			'label'   => esc_html__( 'Sidebar Settings', 'bytegazette' ),
+			'default' => ByteGazette::SIDEBAR_LAYOUT,
+			'choices' => array(
+				'right' => get_template_directory_uri() . '/assets/img/sidebar-right.png',
+				'left'  => get_template_directory_uri() . '/assets/img/sidebar-left.png',
+				'none'  => get_template_directory_uri() . '/assets/img/sidebar-none.png',
+			),
+		) );
+
+		// Content layout setting.
+		ByteGazette_Customizer_Controls::add_image_radio( 'content_layout', 'bytegazette_site', array(
+			'label'   => esc_html__( 'Content Layout', 'bytegazette' ),
+			'default' => ByteGazette::CONTENT_LAYOUT,
+			'choices' => array(
+				'list'    => get_template_directory_uri() . '/assets/img/feed-list.png',
+				'grid'    => get_template_directory_uri() . '/assets/img/feed-cards.png',
+			),
+		) );
 
 		// @todo Generate an actual date and run through the formatters for preview.
 		ByteGazette_Customizer_Controls::add_radio( 'date_format', 'bytegazette_site', array(
 			'label'   => esc_html__( 'Date Format', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_DATE_FORMAT,
+			'default' => ByteGazette::DATE_FORMAT,
 			'choices' => array(
 				'default'  => esc_html__( 'Default', 'bytegazette' ) . ' (' . get_option( 'date_format' ) . ')',
 				'relative' => esc_html__( 'Relative', 'bytegazette' ) . ' (Days Ago)',
 			),
 		) );
+	}
 
-		// Site sidebar display options.
-		ByteGazette_Customizer_Controls::add_image_radio( 'sidebar_layout', 'bytegazette_site', array(
+	/**
+	 * Add to front page section to customize layout.
+	 *
+	 * @return void
+	 */
+	public static function customizer_section_front() {
+		// Site sidebar layout options.
+		ByteGazette_Customizer_Controls::add_image_radio( 'front_sidebar', 'static_front_page', array(
 			'label'   => esc_html__( 'Sidebar Settings', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_SIDEBAR_LAYOUT,
+			'default' => get_theme_mod( 'sidebar_layout', ByteGazette::SIDEBAR_LAYOUT ),
 			'choices' => array(
-				'right_sidebar' => get_template_directory_uri() . '/images/customizer/sidebar_right.png',
-				'left_sidebar'  => get_template_directory_uri() . '/images/customizer/sidebar_left.png',
-				'no_sidebar'    => get_template_directory_uri() . '/images/customizer/sidebar_no.png',
+				'right' => get_template_directory_uri() . '/assets/img/sidebar-right.png',
+				'left'  => get_template_directory_uri() . '/assets/img/sidebar-left.png',
+				'none'  => get_template_directory_uri() . '/assets/img/sidebar-none.png',
 			),
 		) );
 
-		// Site display setting.
-		ByteGazette_Customizer_Controls::add_image_radio( 'content_layout', 'bytegazette_site', array(
-			'label'   => esc_html__( 'Display', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_CONTENT_LAYOUT,
+		// Front content layout setting.
+		ByteGazette_Customizer_Controls::add_image_radio( 'front_layout', 'static_front_page', array(
+			'label'   => esc_html__( 'Content Layout', 'bytegazette' ),
+			'default' => get_theme_mod( 'content_layout', ByteGazette::CONTENT_LAYOUT ),
 			'choices' => array(
-				'default' => get_template_directory_uri() . '/images/customizer/display_default.png',
-				'style1'  => get_template_directory_uri() . '/images/customizer/display_style1.png',
-				'media'   => get_template_directory_uri() . '/images/customizer/display_style1.png',
-				'grid'    => get_template_directory_uri() . '/images/customizer/display_style1.png',
+				'list'    => get_template_directory_uri() . '/assets/img/feed-list.png',
+				'grid'    => get_template_directory_uri() . '/assets/img/feed-cards.png',
 			),
 		) );
 	}
 
 	/**
-	 * Add a section to the theme customizer to customize the home page.
+	 * Add a section to the theme customizer to customize the site navigation.
 	 *
 	 * @return void
 	 */
-	public static function customizer_section_homepage() {
-		ByteGazette_Customizer_Controls::add_section( 'bytegazette_home_page', array(
-			'title'           => esc_html__( 'Home Page', 'bytegazette' ),
-			'active_callback' => 'is_front_page',
-		), 25 );
-
-		ByteGazette_Customizer_Controls::add_custom_image( 'bytegazette_home_page_banner', 'bytegazette_home_page', array(
-			'label'   => esc_html__( 'Home Page Banner', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_HOME_PAGE_BANNER,
-		) );
-	}
-
-	/**
-	 * Add a section to the theme customizer to customize the site header.
-	 *
-	 * @return void
-	 */
-	public static function customizer_section_header() {
-		ByteGazette_Customizer_Controls::add_section( 'bytegazette_header', array(
-			'title' => esc_html__( 'Header', 'bytegazette' ),
+	public static function customizer_section_navigation() {
+		ByteGazette_Customizer_Controls::add_section( 'navigation', array(
+			'title' => esc_html__( 'Navigation Bar', 'bytegazette' ),
 		) );
 
-		ByteGazette_Customizer_Controls::add_color( 'header_bg_color', 'bytegazette_header', array(
-			'label'   => esc_html__( 'Background Color', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_HEADER_BG_COLOR,
+		// Show search box in navbar.
+		ByteGazette_Customizer_Controls::add_checkbox( 'nav_show_search', 'navigation', array(
+			'label'   => esc_html__( 'Show Search', 'bytegazette' ),
+			'default' => ByteGazette::NAV_SHOW_SEARCH,
 		) );
 
-		ByteGazette_Customizer_Controls::add_radio( 'header_fg_class', 'bytegazette_header', array(
-			'label'   => esc_html__( 'Foreground Style', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_HEADER_FG_CLASS,
+		// The fixed position on scroll.
+		ByteGazette_Customizer_Controls::add_radio( 'nav_sticky_setting', 'navigation', array(
+			'label'   => esc_html__( 'Sticky Setting', 'bytegazette' ),
+			'default' => ByteGazette::NAV_STICKY_SETTING,
 			'choices' => array(
-				'uk-light' => esc_html__( 'Light', 'bytegazette' ),
-				'uk-dark'  => esc_html__( 'Dark', 'bytegazette' ),
+				'scroll'     => 'Scroll with page',
+				'sticktop'   => 'Stick to top on scroll',
+				'stickfixed' => 'Fixed header',
 			),
+		) );
+
+		// Custom logo in navbar.
+		ByteGazette_Customizer_Controls::add_cropped_image( 'navigation_icon_logo', 'navigation', array(
+			'label'       => __( 'Icon Logo', 'bytegazette' ),
+			'default'     => ByteGazette::NAVIGATION_ICON_LOGO,
+			'width'       => 80,
+			'height'      => 80,
+			'flex_width'  => true,
+			'flex_height' => false,
 		) );
 	}
 
@@ -229,43 +407,12 @@ class ByteGazette_Admin_Customizer {
 	 */
 	public static function customizer_section_footer() {
 		ByteGazette_Customizer_Controls::add_section( 'bytegazette_footer', array(
-			'title' => esc_html__( 'Footer', 'bytegazette' ),
+			'title' => esc_html__( 'Footer Logo', 'bytegazette' ),
 		) );
 
 		ByteGazette_Customizer_Controls::add_custom_image( 'footer_logo', 'bytegazette_footer', array(
-			'label'   => esc_html__( 'Footer Logo Image', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_FOOTER_LOGO,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_upper_bg_color', 'bytegazette_footer', array(
-			'label'   => esc_html__( 'Upper Footer Background Color', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_FOOTER_UPPER_BG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_lower_bg_color', 'bytegazette_footer', array(
-			'label'   => esc_html__( 'Lower Footer Background Color', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_FOOTER_LOWER_BG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_radio( 'footer_fg_class', 'bytegazette_footer', array(
-			'label'   => esc_html__( 'Foreground Style', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_FOOTER_FG_CLASS,
-			'choices' => array(
-				'uk-light' => esc_html__( 'Light', 'bytegazette' ),
-				'uk-dark'  => esc_html__( 'Dark', 'bytegazette' ),
-			),
-		) );
-
-		ByteGazette_Customizer_Controls::add_textarea( 'footer_upper_text', 'bytegazette_footer', array(
-			'label'       => esc_html__( 'Upper Footer Text', 'bytegazette' ),
-			'default'     => ByteGazette::get_powered_by_text(),
-			'description' => esc_html__( 'Allowed tags: <a>, <br>, <em>, <strong>, <i> <img>, and [shortcodes]', 'bytegazette' ),
-		) );
-
-		ByteGazette_Customizer_Controls::add_textarea( 'footer_lower_text', 'bytegazette_footer', array(
-			'label'       => esc_html__( 'Lower Footer Text', 'bytegazette' ),
-			'default'     => ByteGazette::get_theme_author_text(),
-			'description' => esc_html__( 'Allowed tags: <a>, <br>, <em>, <strong>, <i> <img>, and [shortcodes]', 'bytegazette' ),
+			'label'   => esc_html__( 'Logo', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_LOGO,
 		) );
 	}
 
@@ -277,55 +424,103 @@ class ByteGazette_Admin_Customizer {
 	public static function customizer_section_posts() {
 		// Posts section.
 		ByteGazette_Customizer_Controls::add_section( 'bytegazette_posts', array(
-			'title' => esc_html__( 'Posts', 'bytegazette' ),
+			'title' => esc_html__( 'Post Settings', 'bytegazette' ),
 		) );
 
-		// Show breadcrumbs on posts.
-		ByteGazette_Customizer_Controls::add_checkbox( 'post_breadcrumbs', 'bytegazette_posts', array(
-			'label'   => esc_html__( 'Breadcrumbs', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_POST_BREADCRUMBS,
+		// Show featured image on post pages.
+		ByteGazette_Customizer_Controls::add_checkbox( 'post_featured_image', 'bytegazette_posts', array(
+			'label'   => esc_html__( 'Show Featured Image', 'bytegazette' ),
+			'default' => ByteGazette::POST_FEATURED_IMAGE,
 		) );
 
-		// Show post meta elements on post pages.
-		ByteGazette_Customizer_Controls::add_checkbox( 'post_meta', 'bytegazette_posts', array(
-			'label'   => esc_html__( 'Post Meta', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_POST_META,
+		// Show post date on post pages.
+		ByteGazette_Customizer_Controls::add_checkbox( 'post_date', 'bytegazette_posts', array(
+			'label'   => esc_html__( 'Show Posted Date', 'bytegazette' ),
+			'default' => ByteGazette::POST_DATE,
 		) );
 
-		// Show the related posts section on post pages.
-		ByteGazette_Customizer_Controls::add_checkbox( 'post_related_show', 'bytegazette_posts', array(
-			'label'   => esc_html__( 'Related Posts', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_POST_RELATED,
-		) );
-
-		// Number of related posts to show.
-		ByteGazette_Customizer_Controls::add_number( 'post_related_count', 'bytegazette_posts', array(
-			'label'   => esc_html__( 'Related Posts to Show', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_POST_RELATED_COUNT,
-			'min'     => 1,
-			'max'     => 6,
-		) );
-
-		// Method to use to discover related posts.
-		ByteGazette_Customizer_Controls::add_radio( 'post_related_method', 'bytegazette_posts', array(
-			'label'   => esc_html__( 'Related Posts Method', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_POST_RELATED_METHOD,
-			'choices' => array(
-				'tags'       => esc_html__( 'Tags', 'bytegazette' ),
-				'categories' => esc_html__( 'Categories', 'bytegazette' ),
-			),
+		// Show post author on post pages.
+		ByteGazette_Customizer_Controls::add_checkbox( 'post_author', 'bytegazette_posts', array(
+			'label'   => esc_html__( 'Show Post Author', 'bytegazette' ),
+			'default' => ByteGazette::POST_AUTHOR,
 		) );
 
 		// Show the next/previous links on posts.
 		ByteGazette_Customizer_Controls::add_checkbox( 'post_next_prev', 'bytegazette_posts', array(
-			'label'   => esc_html__( 'Next/Previous Links', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_POST_NEXT_PREV,
+			'label'   => esc_html__( 'Show Previous / Next Links', 'bytegazette' ),
+			'default' => ByteGazette::POST_NEXT_PREV,
+		) );
+
+		// Show post tags on post pages.
+		ByteGazette_Customizer_Controls::add_checkbox( 'post_tags', 'bytegazette_posts', array(
+			'label'   => esc_html__( 'Show Tags', 'bytegazette' ),
+			'default' => ByteGazette::POST_TAGS,
+		) );
+
+		// Show post categories on post pages.
+		ByteGazette_Customizer_Controls::add_checkbox( 'post_categories', 'bytegazette_posts', array(
+			'label'   => esc_html__( 'Show Categories', 'bytegazette' ),
+			'default' => ByteGazette::POST_CATEGORIES,
 		) );
 
 		// Display the author information on posts.
 		ByteGazette_Customizer_Controls::add_checkbox( 'post_author_box', 'bytegazette_posts', array(
-			'label'   => esc_html__( 'Author Box', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_POST_AUTHOR_BOX,
+			'label'   => esc_html__( 'Show Author Box', 'bytegazette' ),
+			'default' => ByteGazette::POST_AUTHOR_BOX,
+		) );
+
+		// Show the related posts section on post pages.
+		ByteGazette_Customizer_Controls::add_checkbox( 'post_related', 'bytegazette_posts', array(
+			'label'   => esc_html__( 'Show Related Posts', 'bytegazette' ),
+			'default' => ByteGazette::POST_RELATED,
+		) );
+	}
+
+	/**
+	 * Add a section to the theme customizer to customize the post comments style.
+	 *
+	 * @return void
+	 */
+	public static function customizer_section_comments() {
+		// Archives section.
+		ByteGazette_Customizer_Controls::add_section( 'comments', array(
+			'title' => __( 'Comment Settings', 'bytegazette' ),
+		) );
+
+		// Comment avatar size.
+		ByteGazette_Customizer_Controls::add_number( 'comment_avatar_size', 'comments', array(
+			'label'       => __( 'Avatar Size', 'bytegazette' ),
+			'description' => __( 'Size in pixels.', 'bytegazette' ),
+			'default'     => ByteGazette::COMMENT_AVATAR_SIZE,
+			'min'         => 16,
+			'max'         => 128,
+		) );
+
+		// Comment pagination.
+		ByteGazette_Customizer_Controls::add_select( 'comment_pagination', 'comments', array(
+			'label'   => __( 'Comment Pagination', 'bytegazette' ),
+			'default' => ByteGazette::COMMENT_PAGINATION,
+			'choices' => array(
+				'above' => __( 'Above Comments', 'bytegazette' ),
+				'below' => __( 'Below Comments', 'bytegazette' ),
+				'both'  => __( 'Above and Below Comments', 'bytegazette' ),
+			),
+		) );
+
+		// Comment list type.
+		ByteGazette_Customizer_Controls::add_select( 'comment_list_tag', 'comments', array(
+			'label'   => __( 'List Type', 'bytegazette' ),
+			'default' => ByteGazette::COMMENT_LIST_TAG,
+			'choices' => array(
+				'ol' => __( 'Ordered', 'bytegazette' ),
+				'ul' => __( 'Unordered', 'bytegazette' ),
+			),
+		) );
+
+		// Show short pingbacks.
+		ByteGazette_Customizer_Controls::add_checkbox( 'comment_short_ping', 'comments', array(
+			'label'   => __( 'Show Short Pingbacks', 'bytegazette' ),
+			'default' => ByteGazette::COMMENT_SHORT_PING,
 		) );
 	}
 
@@ -336,89 +531,53 @@ class ByteGazette_Admin_Customizer {
 	 */
 	public static function customizer_section_archives() {
 		// Archives section.
-		ByteGazette_Customizer_Controls::add_section( 'bytegazette_archives', array(
-			'title' => esc_html__( 'Archives', 'bytegazette' ),
-		) );
-
-		// Show post meta elements on archives.
-		ByteGazette_Customizer_Controls::add_checkbox( 'archives_meta', 'bytegazette_archives', array(
-			'label'   => esc_html__( 'Post Meta', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_ARCHIVES_META,
+		ByteGazette_Customizer_Controls::add_section( 'archives', array(
+			'title' => esc_html__( 'Archive Settings', 'bytegazette' ),
 		) );
 
 		// Max length of the excerpt text on archives.
-		ByteGazette_Customizer_Controls::add_number( 'archives_excerpt_length', 'bytegazette_archives', array(
+		ByteGazette_Customizer_Controls::add_number( 'archives_excerpt_length', 'archives', array(
 			'label'       => esc_html__( 'Excerpt Length', 'bytegazette' ),
 			'description' => esc_html__( 'Excerpt length (in Words) for Homepage & archive pages. Min is 0, max is 500. Set to 0 to disable.', 'bytegazette' ),
-			'default'     => ByteGazette::DEFAULT_ARCHIVES_EXCERPT_LENGTH,
+			'default'     => ByteGazette::ARCHIVES_EXCERPT_LENGTH,
 			'min'         => 0,
 			'max'         => 500,
 		) );
 
+		// Show featured image on archives.
+		ByteGazette_Customizer_Controls::add_checkbox( 'archives_featured_image', 'archives', array(
+			'label'   => esc_html__( 'Show Featured Image', 'bytegazette' ),
+			'default' => ByteGazette::ARCHIVES_FEATURED_IMAGE,
+		) );
+
+		// Show post date on archives.
+		ByteGazette_Customizer_Controls::add_checkbox( 'archives_date', 'archives', array(
+			'label'   => esc_html__( 'Show Post Date', 'bytegazette' ),
+			'default' => ByteGazette::ARCHIVES_DATE,
+		) );
+
+		// Show post author on archives.
+		ByteGazette_Customizer_Controls::add_checkbox( 'archives_author', 'archives', array(
+			'label'   => esc_html__( 'Show Post Author', 'bytegazette' ),
+			'default' => ByteGazette::ARCHIVES_AUTHOR,
+		) );
+
+		// Show read more link on archives.
+		ByteGazette_Customizer_Controls::add_checkbox( 'archives_more_link', 'archives', array(
+			'label'   => esc_html__( 'Show Read More Link', 'bytegazette' ),
+			'default' => ByteGazette::ARCHIVES_MORE_LINK,
+		) );
+
+		// Show category link on archives.
+		ByteGazette_Customizer_Controls::add_checkbox( 'archives_category_link', 'archives', array(
+			'label'   => esc_html__( 'Show Post Category Link', 'bytegazette' ),
+			'default' => ByteGazette::ARCHIVES_CATEGORY_LINK,
+		) );
+
+		// Show comment count on archives.
+		ByteGazette_Customizer_Controls::add_checkbox( 'archives_comment_count', 'archives', array(
+			'label'   => esc_html__( 'Show Post Comment Count', 'bytegazette' ),
+			'default' => ByteGazette::ARCHIVES_COMMENT_COUNT,
+		) );
 	}
-
-	/**
-	 * Amend the section for background customization.
-	 *
-	 * @return void
-	 */
-	public static function customizer_section_background() {
-		ByteGazette_Customizer_Controls::add_radio( 'background_option', 'background_image', array(
-			'label'   => esc_html__( 'Background Image', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_BACKGROUND_OPTION,
-			'choices' => array(
-				'none'         => esc_html__( 'None', 'bytegazette' ),
-				'custom_image' => esc_html__( 'Custom Image', 'bytegazette' ),
-				'pattern'      => esc_html__( 'Pattern', 'bytegazette' ),
-			),
-		), 1 );
-
-		// Background Pattern.
-		ByteGazette_Customizer_Controls::add_image_radio( 'background_pattern', 'background_image', array(
-			'label'   => esc_html__( 'Background Pattern', 'bytegazette' ),
-			'default' => ByteGazette::DEFAULT_BACKGROUND_PATTERN,
-			'choices' => array(
-				get_template_directory_uri() . '/images/patterns/21.gif' => get_template_directory_uri() . '/images/patterns/21.gif',
-				get_template_directory_uri() . '/images/patterns/22.gif' => get_template_directory_uri() . '/images/patterns/22.gif',
-				get_template_directory_uri() . '/images/patterns/23.gif' => get_template_directory_uri() . '/images/patterns/23.gif',
-				get_template_directory_uri() . '/images/patterns/24.gif' => get_template_directory_uri() . '/images/patterns/24.gif',
-				get_template_directory_uri() . '/images/patterns/25.gif' => get_template_directory_uri() . '/images/patterns/25.gif',
-				get_template_directory_uri() . '/images/patterns/26.gif' => get_template_directory_uri() . '/images/patterns/26.gif',
-				get_template_directory_uri() . '/images/patterns/27.gif' => get_template_directory_uri() . '/images/patterns/27.gif',
-				get_template_directory_uri() . '/images/patterns/28.gif' => get_template_directory_uri() . '/images/patterns/28.gif',
-				get_template_directory_uri() . '/images/patterns/29.gif' => get_template_directory_uri() . '/images/patterns/29.gif',
-				get_template_directory_uri() . '/images/patterns/30.gif' => get_template_directory_uri() . '/images/patterns/30.gif',
-				get_template_directory_uri() . '/images/patterns/31.gif' => get_template_directory_uri() . '/images/patterns/31.gif',
-				get_template_directory_uri() . '/images/patterns/32.gif' => get_template_directory_uri() . '/images/patterns/32.gif',
-				get_template_directory_uri() . '/images/patterns/33.gif' => get_template_directory_uri() . '/images/patterns/33.gif',
-				get_template_directory_uri() . '/images/patterns/34.gif' => get_template_directory_uri() . '/images/patterns/34.gif',
-				get_template_directory_uri() . '/images/patterns/35.gif' => get_template_directory_uri() . '/images/patterns/35.gif',
-				get_template_directory_uri() . '/images/patterns/36.gif' => get_template_directory_uri() . '/images/patterns/36.gif',
-				get_template_directory_uri() . '/images/patterns/37.gif' => get_template_directory_uri() . '/images/patterns/37.gif',
-				get_template_directory_uri() . '/images/patterns/38.gif' => get_template_directory_uri() . '/images/patterns/38.gif',
-				get_template_directory_uri() . '/images/patterns/39.gif' => get_template_directory_uri() . '/images/patterns/39.gif',
-				get_template_directory_uri() . '/images/patterns/40.gif' => get_template_directory_uri() . '/images/patterns/40.gif',
-				get_template_directory_uri() . '/images/patterns/2.jpg'  => get_template_directory_uri() . '/images/patterns/2.jpg',
-				get_template_directory_uri() . '/images/patterns/3.jpg'  => get_template_directory_uri() . '/images/patterns/3.jpg',
-				get_template_directory_uri() . '/images/patterns/4.jpg'  => get_template_directory_uri() . '/images/patterns/4.jpg',
-				get_template_directory_uri() . '/images/patterns/5.jpg'  => get_template_directory_uri() . '/images/patterns/5.jpg',
-				get_template_directory_uri() . '/images/patterns/6.jpg'  => get_template_directory_uri() . '/images/patterns/6.jpg',
-				get_template_directory_uri() . '/images/patterns/7.jpg'  => get_template_directory_uri() . '/images/patterns/7.jpg',
-				get_template_directory_uri() . '/images/patterns/8.jpg'  => get_template_directory_uri() . '/images/patterns/8.jpg',
-				get_template_directory_uri() . '/images/patterns/9.jpg'  => get_template_directory_uri() . '/images/patterns/9.jpg',
-				get_template_directory_uri() . '/images/patterns/10.jpg' => get_template_directory_uri() . '/images/patterns/10.jpg',
-				get_template_directory_uri() . '/images/patterns/11.jpg' => get_template_directory_uri() . '/images/patterns/11.jpg',
-				get_template_directory_uri() . '/images/patterns/12.jpg' => get_template_directory_uri() . '/images/patterns/12.jpg',
-				get_template_directory_uri() . '/images/patterns/13.jpg' => get_template_directory_uri() . '/images/patterns/13.jpg',
-				get_template_directory_uri() . '/images/patterns/14.jpg' => get_template_directory_uri() . '/images/patterns/14.jpg',
-				get_template_directory_uri() . '/images/patterns/15.jpg' => get_template_directory_uri() . '/images/patterns/15.jpg',
-				get_template_directory_uri() . '/images/patterns/16.jpg' => get_template_directory_uri() . '/images/patterns/16.jpg',
-				get_template_directory_uri() . '/images/patterns/17.jpg' => get_template_directory_uri() . '/images/patterns/17.jpg',
-				get_template_directory_uri() . '/images/patterns/18.jpg' => get_template_directory_uri() . '/images/patterns/18.jpg',
-				get_template_directory_uri() . '/images/patterns/19.jpg' => get_template_directory_uri() . '/images/patterns/19.jpg',
-				get_template_directory_uri() . '/images/patterns/20.jpg' => get_template_directory_uri() . '/images/patterns/20.jpg',
-			),
-		), 30 );
-	}
-
 }
