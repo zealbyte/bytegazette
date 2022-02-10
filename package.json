@@ -37,7 +37,7 @@
 		"lozad": "^1.7.0",
 		"masonry-layout": "^4.2.2",
 		"mini-css-extract-plugin": "^0.4.4",
-		"node-sass": "^4.9.3",
+		"node-sass": "^7.0.0",
 		"node-sass-glob-importer": "^5.1.2",
 		"normalize.css": "^8.0.1",
 		"optimize-css-assets-webpack-plugin": "^4.0.3",
