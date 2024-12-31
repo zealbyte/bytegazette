@@ -71,7 +71,7 @@ class ByteGazette_Admin_Settings {
 	/**
 	 * The front page options to use panel.
 	 */
-	public function options_panels_front() {
+	public static function options_panels_front() {
 		ByteGazette_Options_Controls::add_panel( 'front_page_slideshow', array(
 			'title'       => __( 'Slideshow', 'bytegazette' ),
 			'description' => __( 'Slideshow options on the home page.', 'bytegazette' ),
@@ -142,7 +142,7 @@ class ByteGazette_Admin_Settings {
 	/**
 	 * The header options to use panel.
 	 */
-	public function options_panels_header() {
+	public static function options_panels_header() {
 		ByteGazette_Options_Controls::add_panel( 'site_header_layout', array(
 			'title'       => __( 'Header Layout', 'bytegazette' ),
 			'description' => __( 'The layout of elements in the site header.', 'bytegazette' ),
@@ -207,7 +207,7 @@ class ByteGazette_Admin_Settings {
 	/**
 	 * The footer options to use panel.
 	 */
-	public function options_panels_footer() {
+	public static function options_panels_footer() {
 		ByteGazette_Options_Controls::add_panel( 'site_footer_layout', array(
 			'title'       => __( 'Footer Layout', 'bytegazette' ),
 			'description' => __( 'The layout of elements in the site footer.', 'bytegazette' ),

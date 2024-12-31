@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$bytegazette_navigation_logo = get_theme_mod( 'navigation_icon_logo', ByteGazette::NAVIGATION_ICON_LOGO );
+$bytegazette_navigation_logo = bytegazette_get_option( 'navigation_icon_logo', ByteGazette::NAVIGATION_ICON_LOGO );
 ?>
 
 <nav class="navbar">

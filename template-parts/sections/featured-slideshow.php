@@ -6,7 +6,7 @@
  */
 
 $bytegazette_slideshow_posts          = bytegazette_slideshow_posts();
-$bytegazette_slideshow_excerpt_length = get_theme_mod( 'slideshow_excerpt_length', ByteGazette::SLIDESHOW_EXCERPT_LENGTH );
+$bytegazette_slideshow_excerpt_length = bytegazette_get_option( 'slideshow_excerpt_length', ByteGazette::SLIDESHOW_EXCERPT_LENGTH );
 ?>
 
 <?php if ( $bytegazette_slideshow_posts->have_posts() ) : ?>

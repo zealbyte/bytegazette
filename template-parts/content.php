@@ -7,6 +7,6 @@
  * @package bytegazette
  */
 
-$bytegazette_content_style = esc_attr( get_theme_mod( 'content_layout', ByteGazette::CONTENT_LAYOUT ) );
+$bytegazette_content_style = esc_attr( bytegazette_get_option( 'content_layout', ByteGazette::CONTENT_LAYOUT ) );
 
 get_template_part( 'template-parts/content', 'default' );

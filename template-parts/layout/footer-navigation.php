@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$bytegazette_footer_logo = get_theme_mod( 'footer_logo', ByteGazette::FOOTER_LOGO );
+$bytegazette_footer_logo = bytegazette_get_option( 'footer_logo', ByteGazette::FOOTER_LOGO );
 ?>
 
 <nav class="navbar">
@@ -36,6 +36,6 @@ $bytegazette_footer_logo = get_theme_mod( 'footer_logo', ByteGazette::FOOTER_LOG
 	<?php endif; ?>
 
 	<div class="footer-about-text">
-		<?php echo wp_kses_post( get_theme_mod( 'footer_lower', ByteGazette::get_theme_author_text() ) ); ?>
+		<?php echo wp_kses_post( bytegazette_get_option( 'footer_lower_text', ByteGazette::get_theme_author_text() ) ); ?>
 	</div>
 </nav>

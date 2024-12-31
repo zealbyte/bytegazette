@@ -43,12 +43,12 @@ $bytegazette_theme_mods  = get_option( $bytegazette_mods_option );
 
 	<h3>Theme Mods</h3>
 	<pre>
-		<?php print_r( $bytegazette_theme_mods ); ?>
+<?php print htmlentities(json_encode($bytegazette_theme_mods, JSON_PRETTY_PRINT)); ?>
 	</pre>
 
 	<h3>Theme Settings</h3>
 	<pre>
-		<?php print_r( $bytegazette_options_settings ); ?>
+<?php print htmlentities(json_encode($bytegazette_options_settings, JSON_PRETTY_PRINT)); ?>
 	</pre>
 
 </div>

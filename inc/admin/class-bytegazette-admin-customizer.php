@@ -250,46 +250,6 @@ class ByteGazette_Admin_Customizer {
 			'label'   => esc_html__( 'Dropdown Item Current Text', 'bytegazette' ),
 			'default' => ByteGazette::HEADER_SUBNAV_ITEM_CURRENT_FG_COLOR,
 		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_fg_color', 'colors', array(
-			'label'   => esc_html__( 'Footer Text', 'bytegazette' ),
-			'default' => ByteGazette::FOOTER_FG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_bg_color', 'colors', array(
-			'label'   => esc_html__( 'Footer Background', 'bytegazette' ),
-			'default' => ByteGazette::FOOTER_BG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_link_fg_color', 'colors', array(
-			'label'   => esc_html__( 'Footer Links', 'bytegazette' ),
-			'default' => ByteGazette::FOOTER_LINK_FG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_heading_fg_color', 'colors', array(
-			'label'   => esc_html__( 'Footer Heading Text', 'bytegazette' ),
-			'default' => ByteGazette::FOOTER_HEADING_FG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_nav_fg_color', 'colors', array(
-			'label'   => esc_html__( 'Footer Navigation Text', 'bytegazette' ),
-			'default' => ByteGazette::FOOTER_NAV_FG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_nav_bg_color', 'colors', array(
-			'label'   => esc_html__( 'Footer Navigation Background', 'bytegazette' ),
-			'default' => ByteGazette::FOOTER_NAV_BG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_nav_link_fg_color', 'colors', array(
-			'label'   => esc_html__( 'Footer Navigation Link', 'bytegazette' ),
-			'default' => ByteGazette::FOOTER_NAV_LINK_FG_COLOR,
-		) );
-
-		ByteGazette_Customizer_Controls::add_color( 'footer_nav_heading_fg_color', 'colors', array(
-			'label'   => esc_html__( 'Footer Navigation Title Text', 'bytegazette' ),
-			'default' => ByteGazette::FOOTER_NAV_HEADING_FG_COLOR,
-		) );
 	}
 
 	/**
@@ -407,12 +367,67 @@ class ByteGazette_Admin_Customizer {
 	 */
 	public static function customizer_section_footer() {
 		ByteGazette_Customizer_Controls::add_section( 'bytegazette_footer', array(
-			'title' => esc_html__( 'Footer Logo', 'bytegazette' ),
+			'title' => esc_html__( 'Footer', 'bytegazette' ),
 		) );
 
 		ByteGazette_Customizer_Controls::add_custom_image( 'footer_logo', 'bytegazette_footer', array(
-			'label'   => esc_html__( 'Logo', 'bytegazette' ),
+			'label'   => esc_html__( 'Footer Logo', 'bytegazette' ),
 			'default' => ByteGazette::FOOTER_LOGO,
+		) );
+
+		ByteGazette_Customizer_Controls::add_textarea( 'footer_upper_text', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Upper Text', 'bytegazette' ),
+			'default' => ByteGazette::get_powered_by_text(),
+		) );
+
+		ByteGazette_Customizer_Controls::add_textarea( 'footer_lower_text', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Lower Text', 'bytegazette' ),
+			'default' => ByteGazette::get_theme_author_text(),
+		) );
+
+		ByteGazette_Customizer_Controls::add_textarea( 'footer_lower_text', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Lower Text', 'bytegazette' ),
+			'default' => ByteGazette::get_theme_author_text(),
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_fg_color', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Text Color', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_bg_color', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Background Color', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_link_fg_color', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Link Color', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_LINK_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_heading_fg_color', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Heading Text Color', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_HEADING_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_nav_fg_color', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Navigation Text Color', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_NAV_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_nav_bg_color', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Navigation Background', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_NAV_BG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_nav_link_fg_color', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Navigation Link Color', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_NAV_LINK_FG_COLOR,
+		) );
+
+		ByteGazette_Customizer_Controls::add_color( 'footer_nav_heading_fg_color', 'bytegazette_footer', array(
+			'label'   => esc_html__( 'Navigation Title Text Color', 'bytegazette' ),
+			'default' => ByteGazette::FOOTER_NAV_HEADING_FG_COLOR,
 		) );
 	}
 

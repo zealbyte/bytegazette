@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$bytegazette_excerpt_length     = get_theme_mod( 'excerpt_length', ByteGazette::ARCHIVES_EXCERPT_LENGTH );
+$bytegazette_excerpt_length     = bytegazette_get_option( 'excerpt_length', ByteGazette::ARCHIVES_EXCERPT_LENGTH );
 $bytegazette_post_show_featured = true;
 ?>
 

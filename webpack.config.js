@@ -1,11 +1,10 @@
 'use strict';
 
 const path = require( 'path' );
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
-const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
-const OptimizeCSSAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
-const ManifestPlugin = require( 'webpack-manifest-plugin' );
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 // These are the paths where different types of resources should end up.
 const paths = {
@@ -51,21 +50,21 @@ const webpackConfig = ( env, srcPath, buildPath ) => {
 			minimize: false,
 		},
 		output: {
-			filename: paths.js + ( env.development ? '[name].bundle.js' : '[name].[hash].bundle.js' ),
-			chunkFilename: paths.js + ( env.development ? '[name].chunk.js' : '[name].[hash].chunk.js' ),
+			filename: paths.js + ( env.production ? '[name].[hash].bundle.js' : '[name].bundle.js' ),
+			chunkFilename: paths.js + ( env.production ? '[name].[hash].chunk.js' : '[name].chunk.js'  ),
 			path: buildPath,
 			publicPath: '/',
 		},
 		resolve: {
-			extensions: ['*', '.js', '.scss'],
+			extensions: ['*', '.js', '.css', '.scss'],
 		},
 		plugins: [
-			new ManifestPlugin( {
+			new WebpackManifestPlugin( {
 				fileName: 'manifest.json',
 			} ),
 			new MiniCssExtractPlugin( {
-				filename: paths.css + ( env.development ? '[name].bundle.css' : '[name].[hash].bundle.css' ),
-				chunkFilename: paths.css + ( env.development ? '[id].chunk.css' : '[id].[hash].chunk.css' ),
+				filename: paths.css + ( env.production ? '[name].[hash].bundle.css' : '[name].bundle.css' ),
+				chunkFilename: paths.css + ( env.production ? '[id].[hash].chunk.css' : '[id].chunk.css' ),
 			} ),
 		],
 		module: {
@@ -80,7 +79,6 @@ const webpackConfig = ( env, srcPath, buildPath ) => {
 					test: /\.s?css$/,
 					exclude: /node_modules/,
 					use: [
-						//env.development ? 'style-loader' : MiniCssExtractPlugin.loader,
 						MiniCssExtractPlugin.loader,
 						'css-loader',
 						'postcss-loader',
@@ -95,12 +93,14 @@ const webpackConfig = ( env, srcPath, buildPath ) => {
 				{
 					test: /\.(png|svg|jpg|gif)$/,
 					exclude: /node_modules/,
+					type: 'asset/resource',
 					use: [
 						{
 							loader: 'file-loader',
 							options: {
 								name: '[name].[ext]',
 								context: '',
+								useRelativePath: true,
 								outputPath: paths.img,
 								publicPath: '../img/',
 							},
@@ -115,47 +115,45 @@ const webpackConfig = ( env, srcPath, buildPath ) => {
 		config.devtool = false;
 		config.optimization.minimize = true;
 
-		config.plugins.push( new OptimizeCSSAssetsPlugin( {} ) );
-
 		config.plugins.push(
-			new CleanWebpackPlugin( [buildPath] )
+			new CleanWebpackPlugin( {
+				verbose: true,
+			} )
 		);
 
 		config.plugins.push(
-			new CopyWebpackPlugin( [
-				{
-					from: path.resolve( srcPath, 'inc' ) + '/**',
-					to: buildPath,
-				},
-				{
-					from: path.resolve( srcPath, 'languages' ) + '/**',
-					to: buildPath,
-				},
-				{
-					from: path.resolve( srcPath, 'layouts' ) + '/**',
-					to: buildPath,
-				},
-				{
-					from: path.resolve( srcPath, 'template-parts' ) + '/**',
-					to: buildPath,
-				},
-				{
-					from: path.resolve( srcPath, '*.css' ),
-					to: buildPath,
-				},
-				{
-					from: path.resolve( srcPath, '*.md' ),
-					to: buildPath,
-				},
-				{
-					from: path.resolve( srcPath, '*.php' ),
-					to: buildPath,
-				},
-				{
-					from: path.resolve( srcPath, '*.txt' ),
-					to: buildPath,
-				},
-			], {
+			new CopyWebpackPlugin( {
+				patterns: [
+					{
+						from: path.resolve( srcPath, 'inc' ) + '/**',
+						to: buildPath,
+					},
+					{
+						from: path.resolve( srcPath, 'languages' ) + '/**',
+						to: buildPath,
+					},
+					{
+						from: path.resolve( srcPath, 'template-parts' ) + '/**',
+						to: buildPath,
+					},
+					{
+						from: path.resolve( srcPath, '*.css' ),
+						to: buildPath,
+					},
+					{
+						from: path.resolve( srcPath, '*.md' ),
+						to: buildPath,
+					},
+					{
+						from: path.resolve( srcPath, '*.php' ),
+						to: buildPath,
+					},
+					{
+						from: path.resolve( srcPath, '*.txt' ),
+						to: buildPath,
+					},
+				]
+			}, {
 				copyUnmodified: true,
 			} )
 		);
@@ -166,13 +164,8 @@ const webpackConfig = ( env, srcPath, buildPath ) => {
 
 module.exports = ( env ) => {
 	const srcPath = __dirname;
-	let buildPath = path.resolve( srcPath, '.' );
+	const buildPath = env.production ? path.resolve( srcPath, 'build' ) : path.resolve( srcPath, '.' );
 
-	if ( env.production ) {
-		buildPath = path.resolve( srcPath, 'build' );
-	}
-
-	console.log( 'development: ', env.development ? 'yes' : 'no' );
 	console.log( 'production: ', env.production ? 'yes' : 'no' );
 
 	return [Object.assign( {}, webpackConfig( env, srcPath, buildPath ), themeConfig )];

@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! get_theme_mod( 'author_box', '1' ) ) {
+if ( ! bytegazette_get_option( 'author_box', '1' ) ) {
 	return '';
 }
 

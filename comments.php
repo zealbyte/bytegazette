@@ -23,7 +23,7 @@ if ( post_password_required() ) {
 }
 
 $bytegazette_comment_count      = get_comments_number();
-$bytegazette_comment_pagination = get_theme_mod( 'comment_pagination', ByteGazette::COMMENT_PAGINATION );
+$bytegazette_comment_pagination = bytegazette_get_option( 'comment_pagination', ByteGazette::COMMENT_PAGINATION );
 ?>
 
 <section>

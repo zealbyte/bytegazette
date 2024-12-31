@@ -48,7 +48,7 @@ function bytegazette_get_option( $option_name, $default_value = null ) {
 		return $bytegazette_options_settings[ $option_name ];
 	}
 
-	return $default_value;
+	return get_theme_mod( $option_name, $default_value );
 }
 
 /**
@@ -153,14 +153,14 @@ if ( ! function_exists( 'bytegazette_list_comments' ) ) :
 	 * @param array $attrs The attributes to override to wp_list_comments.
 	 */
 	function bytegazette_list_comments( $attrs = array() ) {
-		$tag = get_theme_mod( 'comment_list_tag', ByteGazette::COMMENT_LIST_TAG );
+		$tag = bytegazette_get_option( 'comment_list_tag', ByteGazette::COMMENT_LIST_TAG );
 
 		printf( '<%s class="comment-list">', esc_attr( $tag ) );
 
 		wp_list_comments( array_merge( array(
 			'style'        => $tag,
-			'short_ping'   => get_theme_mod( 'comment_short_ping', ByteGazette::COMMENT_SHORT_PING ),
-			'avatar_size'  => get_theme_mod( 'comment_avatar_size', ByteGazette::COMMENT_AVATAR_SIZE ),
+			'short_ping'   => bytegazette_get_option( 'comment_short_ping', ByteGazette::COMMENT_SHORT_PING ),
+			'avatar_size'  => bytegazette_get_option( 'comment_avatar_size', ByteGazette::COMMENT_AVATAR_SIZE ),
 			'callback'     => 'bytegazette_comment',
 		), $attrs ) );
 
@@ -177,8 +177,8 @@ if ( ! function_exists( 'bytegazette_slideshow_posts' ) ) :
 	 * @return WP_Query The featured posts to show.
 	 */
 	function bytegazette_slideshow_posts( $tag = null, $count = null ) {
-		$tag = (bool) $tag ? $tag : get_theme_mod( 'slideshow_posts_tag', ByteGazette::SLIDESHOW_POSTS_TAG );
-		$num = (bool) $count ? $count : get_theme_mod( 'slideshow_posts_count', ByteGazette::SLIDESHOW_POSTS_COUNT );
+		$tag = (bool) $tag ? $tag : bytegazette_get_option( 'slideshow_posts_tag', ByteGazette::SLIDESHOW_POSTS_TAG );
+		$num = (bool) $count ? $count : bytegazette_get_option( 'slideshow_posts_count', ByteGazette::SLIDESHOW_POSTS_COUNT );
 
 		return bytegazette_featured_posts( $tag, $num );
 	}
@@ -193,8 +193,8 @@ if ( ! function_exists( 'bytegazette_featured_posts' ) ) :
 	 * @return WP_Query The featured posts to show.
 	 */
 	function bytegazette_featured_posts( $tag = null, $count = null ) {
-		$tag = (bool) $tag ? $tag : get_theme_mod( 'featured_posts_tag', ByteGazette::FEATURED_POSTS_TAG );
-		$num = (bool) $count ? $count : get_theme_mod( 'featured_posts_count', ByteGazette::FEATURED_POSTS_COUNT );
+		$tag = (bool) $tag ? $tag : bytegazette_get_option( 'featured_posts_tag', ByteGazette::FEATURED_POSTS_TAG );
+		$num = (bool) $count ? $count : bytegazette_get_option( 'featured_posts_count', ByteGazette::FEATURED_POSTS_COUNT );
 
 		$args = array(
 			'tag'            => (string) $tag,
@@ -247,8 +247,8 @@ if ( ! function_exists( 'bytegazette_related_posts' ) ) :
 	 */
 	function bytegazette_related_posts() {
 		$post_id = get_the_ID();
-		$method  = get_theme_mod( 'post_related_method', ByteGazette::POST_RELATED_METHOD );
-		$count   = (int) get_theme_mod( 'post_related_count', ByteGazette::POST_RELATED_COUNT );
+		$method  = bytegazette_get_option( 'post_related_method', ByteGazette::POST_RELATED_METHOD );
+		$count   = (int) bytegazette_get_option( 'post_related_count', ByteGazette::POST_RELATED_COUNT );
 
 		if ( ByteGazette::POST_RELATED_MAX < $bytegazette_post_related_count ) {
 			$bytegazette_post_related_count = ByteGazette::POST_RELATED_MAX;
@@ -574,7 +574,7 @@ if ( ! function_exists( 'bytegazette_posted' ) ) {
 
 		global $post;
 
-		$format = get_theme_mod( 'date_format', 'ago' );
+		$format = bytegazette_get_option( 'date_format', 'ago' );
 
 		if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
 
@@ -618,14 +618,14 @@ if ( ! function_exists( 'bytegazette_get_sidebar_layout' ) ) :
 	 * Get the sidebar class as per configured sidebar location.
 	 */
 	function bytegazette_get_sidebar_layout() {
-		$sidebar_layout = get_theme_mod( 'sidebar_layout', ByteGazette::SIDEBAR_LAYOUT );
+		$sidebar_layout = bytegazette_get_option( 'sidebar_layout', ByteGazette::SIDEBAR_LAYOUT );
 
 		if ( is_home() ) {
-			$sidebar_layout = get_theme_mod( 'front_sidebar', $sidebar_layout );
+			$sidebar_layout = bytegazette_get_option( 'front_sidebar', $sidebar_layout );
 		} elseif ( is_singular() ) {
-			$sidebar_layout = get_theme_mod( 'sidebar_layout', $sidebar_layout );
+			$sidebar_layout = bytegazette_get_option( 'sidebar_layout', $sidebar_layout );
 		} elseif ( is_archive() ) {
-			$sidebar_layout = get_theme_mod( 'sidebar_layout', $sidebar_layout );
+			$sidebar_layout = bytegazette_get_option( 'sidebar_layout', $sidebar_layout );
 		}
 
 		if ( in_array( $sidebar_layout, array( 'left', 'right', 'none' ), true ) ) {
@@ -641,7 +641,7 @@ if ( ! function_exists( 'bytegazette_get_sidebar_width' ) ) :
 	 * Get the sidebar width as configured.
 	 */
 	function bytegazette_get_sidebar_width() {
-		$sidebar_width = get_theme_mod( 'sidebar_layout', ByteGazette::SIDEBAR_WIDTH );
+		$sidebar_width = bytegazette_get_option( 'sidebar_layout', ByteGazette::SIDEBAR_WIDTH );
 
 		if ( in_array( $sidebar_width, array( '1_2', '1_3', '1_4', '1_6' ), true ) ) {
 			return $sidebar_width;

@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$bytegazette_prev_next_show    = get_theme_mod( 'post_next_prev', ByteGazette::POST_NEXT_PREV ) ? true : false;
-$bytegazette_post_author_show  = get_theme_mod( 'post_author_box', ByteGazette::POST_AUTHOR_BOX ) ? true : false;
-$bytegazette_post_related_show = get_theme_mod( 'post_related', ByteGazette::POST_RELATED ) ? true : false;
+$bytegazette_prev_next_show    = bytegazette_get_option( 'post_next_prev', ByteGazette::POST_NEXT_PREV ) ? true : false;
+$bytegazette_post_author_show  = bytegazette_get_option( 'post_author_box', ByteGazette::POST_AUTHOR_BOX ) ? true : false;
+$bytegazette_post_related_show = bytegazette_get_option( 'post_related', ByteGazette::POST_RELATED ) ? true : false;
 
 get_header();
 ?>

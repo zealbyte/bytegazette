@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $bytegazette_title_featured_posts    = bytegazette_get_option( 'title_featured_posts', BYTEGAZETTE_STRING_FEATURED_POSTS );
 $bytegazette_featured_posts          = bytegazette_featured_posts();
-$bytegazette_featured_excerpt_length = get_theme_mod( 'featured_excerpt_length', ByteGazette::FEATURED_EXCERPT_LENGTH );
+$bytegazette_featured_excerpt_length = bytegazette_get_option( 'featured_excerpt_length', ByteGazette::FEATURED_EXCERPT_LENGTH );
 ?>
 
 <?php if ( $bytegazette_featured_posts->have_posts() ) : ?>

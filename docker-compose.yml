@@ -4,20 +4,27 @@ services:
 
   wordpress:
     image: wordpress
+    restart: always
     ports:
       - 8888:80
     environment:
-      WORDPRESS_DB_PASSWORD: example
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
       ABSPATH: /usr/src/wordpress/
     volumes:
       - wordpress:/var/www/html
       - .:/var/www/html/wp-content/themes/bytegazette
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
+    restart: always
     environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
       MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: wordpress_test
     volumes:
       - wpdb:/var/lib/mysql
 
@@ -31,5 +38,4 @@ services:
 volumes:
 
   wordpress:
-
   wpdb:

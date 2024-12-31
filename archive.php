@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$bytegazette_content_layout    = get_theme_mod( 'content_layout', ByteGazette::CONTENT_LAYOUT );
+$bytegazette_content_layout    = bytegazette_get_option( 'content_layout', ByteGazette::CONTENT_LAYOUT );
 $bytegazette_post_column_style = 'list' === $bytegazette_content_layout || is_singular() ? 's12' : 's12 m6 l6';
 
 get_header();

@@ -20,6 +20,7 @@ vendor
 .sass-cache
 .config
 .npm
+.cache
 phpcs.xml
 yarn.lock
 docker-compose.override.yml
